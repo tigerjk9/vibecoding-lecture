@@ -83,9 +83,18 @@ body {
   line-height: 1.75;
   word-break: keep-all;          /* 한글 음절 고아 줄바꿈 방지 */
   line-break: strict;
+  /* 마지막 줄에 한 어절만 남는 고아 단어를 막는다. 상속되므로 본문 전체에 걸린다. */
+  text-wrap: pretty;
   overflow-x: hidden;            /* 가로 스크롤 금지 */
   -webkit-font-smoothing: antialiased;
 }
+
+/* 제목과 짧은 산문은 pretty(마지막 줄만 손봄)보다 balance(줄 길이를 고르게)가 맞다.
+   "긴 첫 줄 + 한 단어"로 끊기는 것도, 마지막 줄만 뭉텅 짧게 남는 것도 함께 사라진다.
+   여기 걸린 것은 전부 네 줄 안쪽이다 — 그보다 길면 브라우저가 balance를 무시하고
+   body의 pretty로 돌아가므로, 긴 글이 늘어나도 손해는 없다. */
+h1, h2, h3, p, li, .cap, .hero-accent, .eyebrow, .chip, .jfoot, .sec-label,
+.dl .t b, .dl .t span { text-wrap: balance; }
 
 /* height:auto가 없으면 HTML의 height 속성이 그대로 먹어 표지가 세로로 늘어난다.
    aspect-ratio를 쓰는 썸네일은 auto에서 비율대로 높이를 계산하므로 함께 안전하다. */
@@ -333,7 +342,9 @@ section.band.alt .tabs { background: var(--surface-2); }
   display: grid; gap: 16px;
   grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
 }
-@media (max-width: 620px) { .grid { gap: 11px; grid-template-columns: repeat(2, 1fr); } }
+/* 1fr의 최소값은 auto다. keep-all 때문에 안 쪼개지는 긴 어절이 min-content를 밀어올려
+   두 열의 폭이 어긋난다. minmax(0,1fr)로 못을 박아야 정확히 반반이 된다. */
+@media (max-width: 620px) { .grid { gap: 11px; grid-template-columns: repeat(2, minmax(0, 1fr)); } }
 
 .thumb {
   border: 0; padding: 0; background: none; font-family: inherit; cursor: pointer;
@@ -359,7 +370,10 @@ section.band.alt .tabs { background: var(--surface-2); }
   font-size: 13px; line-height: 1.5; color: var(--ink-2); font-weight: 600;
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
 }
-@media (max-width: 620px) { .thumb .cap { font-size: 12px; } }
+/* 폰에서는 2열이라 칸이 좁다. 두 줄로 자르면 제목 절반이 문장 중간에서 끊긴다.
+   좁을수록 줄을 더 준다 — 카드가 조금 길어지는 대신 제목이 온전히 남는다. */
+@media (max-width: 620px) { .thumb .cap { font-size: 12px; -webkit-line-clamp: 3; } }
+@media (max-width: 400px) { .thumb .cap { -webkit-line-clamp: 4; } }
 
 .gallery-empty { color: var(--ink-3); padding: 30px 0; }
 
@@ -583,18 +597,18 @@ footer.foot .fine {
 <section class="hero">
   <div class="wrap hero-grid">
     <div>
-      <span class="eyebrow"><span class="dot"></span>강의 자료 · PART 1-4 + 부록</span>
-      <h1 class="hero-title">요즘 교사를 위한 웹앱 만들기<span class="hero-accent">with 바이브 코딩</span></h1>
-      <p class="hero-summary">오늘 함께 볼 것은 코딩 문법이 아니라, 교실의 불편 하나를 실제로 돌아가는 웹 서비스로 바꾸는 전체 경로입니다. 여덟 개 장을 네 개의 파트로 나눠 갑니다.</p>
+      <span class="eyebrow"><span class="dot"></span>강의 자료 · PART 1-4 + 부록</span>
+      <h1 class="hero-title">요즘 교사를 위한 웹앱 만들기<span class="hero-accent">with 바이브 코딩</span></h1>
+      <p class="hero-summary">오늘 함께 볼 것은 코딩 문법이 아니라, 교실의 불편 하나를 실제로 돌아가는 웹 서비스로 바꾸는 전체 경로입니다. 여덟 개 장을 네 개의 파트로 나눠 갑니다.</p>
       <div class="hero-meta">
           <span class="chip">구성 <b>슬라이드 85장 · Part 1-4 + 부록</b></span>
         </div>
-      <p class="hero-note">슬라이드는 강의 화면과 같은 것입니다. 놓친 장면은 여기서 다시 보고, 필요한 파트는 PDF로 받아 가세요. 강의가 끝난 뒤에도 주소는 그대로입니다.</p>
+      <p class="hero-note">슬라이드는 강의 화면과 같은 것입니다. 놓친 장면은 여기서 다시 보고, 필요한 파트는 PDF로 받아 가세요. 강의가 끝난 뒤에도 주소는 그대로입니다.</p>
     </div>
 
     <aside class="qr-card">
       <h2><span class="dot"></span>폰으로 함께 보기</h2>
-      <p class="qr-hint">카메라를 QR에 비추면 이 페이지가 열립니다. 앱을 깔 필요는 없습니다.</p>
+      <p class="qr-hint">카메라를 QR에 비추면 이 페이지가 열립니다. 앱을 깔 필요는 없습니다.</p>
       <div class="qr-holder" id="qrHolder"></div>
       <div class="qr-url" id="qrUrl"></div>
       <div class="qr-actions">
@@ -613,57 +627,57 @@ footer.foot .fine {
   <div class="wrap">
     <div class="sec-head">
       <p class="sec-label">오늘의 여정</p>
-      <h2>앱에 기관을 하나씩 달아 갑니다</h2>
-      <p>화면을 만들고(Part 1), 바깥의 지식을 끌어오고(Part 2), 기억을 심고(Part 3), 마지막에 내 컴퓨터를 작업실로 만듭니다(Part 4). 카드를 누르면 그 파트의 슬라이드로 갑니다.</p>
+      <h2>앱에 기관을 하나씩 달아 갑니다</h2>
+      <p>화면을 만들고(Part 1), 바깥의 지식을 끌어오고(Part 2), 기억을 심고(Part 3), 마지막에 내 컴퓨터를 작업실로 만듭니다(Part 4). 카드를 누르면 그 파트의 슬라이드로 갑니다.</p>
     </div>
     <div class="journey">
     <a class="jcard" href="#slides" data-jump="intro" style="--pc:#E85297">
       <span class="ghost" aria-hidden="true">0</span>
       <span class="jlabel">도입</span>
-      <h3>&quot;이게 왜 이렇게 불편하지?&quot;</h3>
-      <p>이 한 줄에서 모든 서비스가 시작됐습니다. 오늘 갈 길을 먼저 펼쳐 봅니다.</p>
+      <h3>&quot;이게 왜 이렇게 불편하지?&quot;</h3>
+      <p>이 한 줄에서 모든 서비스가 시작됐습니다. 오늘 갈 길을 먼저 펼쳐 봅니다.</p>
       <span class="jfoot">슬라이드 3장 · 1–3 →</span>
     </a>
     <a class="jcard" href="#slides" data-jump="part1" style="--pc:#6356A2">
       <span class="ghost" aria-hidden="true">01</span>
       <span class="jlabel">PART 01</span>
-      <h3>아이디어를 서비스로 전환하는 첫걸음</h3>
-      <p>한숨을 문제로 바꾸고, PRD 한 장을 거쳐, 코드 한 줄 치지 않고 작동하는 화면까지.</p>
+      <h3>아이디어를 서비스로 전환하는 첫걸음</h3>
+      <p>한숨을 문제로 바꾸고, PRD 한 장을 거쳐, 코드 한 줄 치지 않고 작동하는 화면까지.</p>
       <span class="jfoot">슬라이드 19장 · 4–22 →</span>
     </a>
     <a class="jcard" href="#slides" data-jump="part2" style="--pc:#3688C9">
       <span class="ghost" aria-hidden="true">02</span>
       <span class="jlabel">PART 02</span>
-      <h3>앱에 지식을 더하다</h3>
-      <p>우리가 만든 앱은 아직 고립된 섬입니다. API로 바깥 세계와 연결해 눈과 귀를 답니다.</p>
+      <h3>앱에 지식을 더하다</h3>
+      <p>우리가 만든 앱은 아직 고립된 섬입니다. API로 바깥 세계와 연결해 눈과 귀를 답니다.</p>
       <span class="jfoot">슬라이드 20장 · 23–42 →</span>
     </a>
     <a class="jcard" href="#slides" data-jump="part3" style="--pc:#4A3E8F">
       <span class="ghost" aria-hidden="true">03</span>
       <span class="jlabel">PART 03</span>
-      <h3>앱에 클라우드 기능을 심다</h3>
-      <p>새로고침 한 번에 사라지는 앱은 아직 서비스가 아닙니다. 데이터베이스로 기억을 심습니다.</p>
+      <h3>앱에 클라우드 기능을 심다</h3>
+      <p>새로고침 한 번에 사라지는 앱은 아직 서비스가 아닙니다. 데이터베이스로 기억을 심습니다.</p>
       <span class="jfoot">슬라이드 13장 · 43–55 →</span>
     </a>
     <a class="jcard" href="#slides" data-jump="part4" style="--pc:#6356A2">
       <span class="ghost" aria-hidden="true">04</span>
       <span class="jlabel">PART 04</span>
-      <h3>로컬 환경에서 진짜 개발자처럼 일하기</h3>
-      <p>편리한 공유 오피스에는 내 이름표가 없습니다. IDE와 깃, 그리고 배포까지 내 손으로.</p>
+      <h3>로컬 환경에서 진짜 개발자처럼 일하기</h3>
+      <p>편리한 공유 오피스에는 내 이름표가 없습니다. IDE와 깃, 그리고 배포까지 내 손으로.</p>
       <span class="jfoot">슬라이드 20장 · 56–75 →</span>
     </a>
     <a class="jcard" href="#slides" data-jump="appendix" style="--pc:#E85297">
       <span class="ghost" aria-hidden="true">A</span>
       <span class="jlabel">부록</span>
-      <h3>그 밖의 인공지능 도구들</h3>
-      <p>도구는 계속 바뀝니다. 그래서 부록은 Cursor와 Claude Code의 소개와 설치만 다룹니다.</p>
+      <h3>그 밖의 인공지능 도구들</h3>
+      <p>도구는 계속 바뀝니다. 그래서 부록은 Cursor와 Claude Code의 소개와 설치만 다룹니다.</p>
       <span class="jfoot">슬라이드 8장 · 76–83 →</span>
     </a>
     <a class="jcard" href="#slides" data-jump="closing" style="--pc:#231815">
       <span class="ghost" aria-hidden="true">·</span>
       <span class="jlabel">클로징</span>
-      <h3>실력은 손이 아니라 입에서 나온다</h3>
-      <p>내일 아침, 가장 자주 나오는 한숨 하나를 받아 적는 것에서 다시 시작합니다.</p>
+      <h3>실력은 손이 아니라 입에서 나온다</h3>
+      <p>내일 아침, 가장 자주 나오는 한숨 하나를 받아 적는 것에서 다시 시작합니다.</p>
       <span class="jfoot">슬라이드 2장 · 84–85 →</span>
     </a>
     </div>
@@ -673,8 +687,8 @@ footer.foot .fine {
   <div class="wrap">
     <div class="sec-head">
       <p class="sec-label">슬라이드</p>
-      <h2>강의 슬라이드 85장</h2>
-      <p>썸네일을 누르면 크게 봅니다. 크게 본 상태에서 좌우로 밀거나 화살표 키로 넘길 수 있습니다.</p>
+      <h2>강의 슬라이드 85장</h2>
+      <p>썸네일을 누르면 크게 봅니다. 크게 본 상태에서 좌우로 밀거나 화살표 키로 넘길 수 있습니다.</p>
     </div>
     <div class="tabs" role="tablist" aria-label="파트 고르기">
       <button class="tab" type="button" data-part="all" aria-selected="true">전체 85장</button>
@@ -692,595 +706,595 @@ footer.foot .fine {
                aria-label="슬라이드 1 요즘 교사를 위한 웹앱 만들기 with 바이브 코딩 크게 보기">
         <img src="assets/thumbs/s1.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 1 — 요즘 교사를 위한 웹앱 만들기 with 바이브 코딩">
-        <figcaption><span class="num">1</span><span class="cap">요즘 교사를 위한 웹앱 만들기 with 바이브 코딩</span></figcaption>
+        <figcaption><span class="num">1</span><span class="cap">요즘 교사를 위한 웹앱 만들기 with 바이브 코딩</span></figcaption>
       </figure>
       <figure class="thumb" data-part="intro" data-index="1"
                role="button" tabindex="0" style="--pc:#E85297"
                aria-label="슬라이드 2 &quot;이게 왜 이렇게 불편하지?&quot; — 이 한 줄에서 모든 서비스가 시작됐다 크게 보기">
         <img src="assets/thumbs/s2.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 2 — &quot;이게 왜 이렇게 불편하지?&quot; — 이 한 줄에서 모든 서비스가 시작됐다">
-        <figcaption><span class="num">2</span><span class="cap">&quot;이게 왜 이렇게 불편하지?&quot; — 이 한 줄에서 모든 서비스가 시작됐다</span></figcaption>
+        <figcaption><span class="num">2</span><span class="cap">&quot;이게 왜 이렇게 불편하지?&quot; — 이 한 줄에서 모든 서비스가 시작됐다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="intro" data-index="2"
                role="button" tabindex="0" style="--pc:#E85297"
                aria-label="슬라이드 3 오늘 우리는 앱에 기관을 하나씩 달아 갑니다 크게 보기">
         <img src="assets/thumbs/s3.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 3 — 오늘 우리는 앱에 기관을 하나씩 달아 갑니다">
-        <figcaption><span class="num">3</span><span class="cap">오늘 우리는 앱에 기관을 하나씩 달아 갑니다</span></figcaption>
+        <figcaption><span class="num">3</span><span class="cap">오늘 우리는 앱에 기관을 하나씩 달아 갑니다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="3"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 4 Part 01 아이디어를 서비스로 전환하는 첫걸음 크게 보기">
         <img src="assets/thumbs/s4.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 4 — Part 01 아이디어를 서비스로 전환하는 첫걸음">
-        <figcaption><span class="num">4</span><span class="cap">Part 01 아이디어를 서비스로 전환하는 첫걸음</span></figcaption>
+        <figcaption><span class="num">4</span><span class="cap">Part 01 아이디어를 서비스로 전환하는 첫걸음</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="4"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 5 200명의 서술형 답안지는 16시간짜리 노동이다 크게 보기">
         <img src="assets/thumbs/s5.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 5 — 200명의 서술형 답안지는 16시간짜리 노동이다">
-        <figcaption><span class="num">5</span><span class="cap">200명의 서술형 답안지는 16시간짜리 노동이다</span></figcaption>
+        <figcaption><span class="num">5</span><span class="cap">200명의 서술형 답안지는 16시간짜리 노동이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="5"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 6 기술은 발전했는데 평가만 과거에 머물러 있다 크게 보기">
         <img src="assets/thumbs/s6.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 6 — 기술은 발전했는데 평가만 과거에 머물러 있다">
-        <figcaption><span class="num">6</span><span class="cap">기술은 발전했는데 평가만 과거에 머물러 있다</span></figcaption>
+        <figcaption><span class="num">6</span><span class="cap">기술은 발전했는데 평가만 과거에 머물러 있다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="6"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 7 체념을 정의로 바꾸면, 불편함은 입력·판단·출력 세 문제가 된다 크게 보기">
         <img src="assets/thumbs/s7.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 7 — 체념을 정의로 바꾸면, 불편함은 입력·판단·출력 세 문제가 된다">
-        <figcaption><span class="num">7</span><span class="cap">체념을 정의로 바꾸면, 불편함은 입력·판단·출력 세 문제가 된다</span></figcaption>
+        <figcaption><span class="num">7</span><span class="cap">체념을 정의로 바꾸면, 불편함은 입력·판단·출력 세 문제가 된다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="7"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 8 한숨이 앱의 이름이고, 한숨의 이유가 핵심 기능이다 크게 보기">
         <img src="assets/thumbs/s8.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 8 — 한숨이 앱의 이름이고, 한숨의 이유가 핵심 기능이다">
-        <figcaption><span class="num">8</span><span class="cap">한숨이 앱의 이름이고, 한숨의 이유가 핵심 기능이다</span></figcaption>
+        <figcaption><span class="num">8</span><span class="cap">한숨이 앱의 이름이고, 한숨의 이유가 핵심 기능이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="8"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 9 좋은 문제는 만능이 아니라 칼날처럼 구체적이다 크게 보기">
         <img src="assets/thumbs/s9.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 9 — 좋은 문제는 만능이 아니라 칼날처럼 구체적이다">
-        <figcaption><span class="num">9</span><span class="cap">좋은 문제는 만능이 아니라 칼날처럼 구체적이다</span></figcaption>
+        <figcaption><span class="num">9</span><span class="cap">좋은 문제는 만능이 아니라 칼날처럼 구체적이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="9"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 10 &quot;나는 [사용자]로서, [목표]를 위해, [기능]이 필요하다&quot; 크게 보기">
         <img src="assets/thumbs/s10.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 10 — &quot;나는 [사용자]로서, [목표]를 위해, [기능]이 필요하다&quot;">
-        <figcaption><span class="num">10</span><span class="cap">&quot;나는 [사용자]로서, [목표]를 위해, [기능]이 필요하다&quot;</span></figcaption>
+        <figcaption><span class="num">10</span><span class="cap">&quot;나는 [사용자]로서, [목표]를 위해, [기능]이 필요하다&quot;</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="10"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 11 MVP는 아이언맨 슈트가 아니라 바퀴 달린 의자다 크게 보기">
         <img src="assets/thumbs/s11.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 11 — MVP는 아이언맨 슈트가 아니라 바퀴 달린 의자다">
-        <figcaption><span class="num">11</span><span class="cap">MVP는 아이언맨 슈트가 아니라 바퀴 달린 의자다</span></figcaption>
+        <figcaption><span class="num">11</span><span class="cap">MVP는 아이언맨 슈트가 아니라 바퀴 달린 의자다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="11"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 12 PRD 한 장이 고민의 80%를 미리 없앤다 크게 보기">
         <img src="assets/thumbs/s12.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 12 — PRD 한 장이 고민의 80%를 미리 없앤다">
-        <figcaption><span class="num">12</span><span class="cap">PRD 한 장이 고민의 80%를 미리 없앤다</span></figcaption>
+        <figcaption><span class="num">12</span><span class="cap">PRD 한 장이 고민의 80%를 미리 없앤다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="12"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 13 복사 → 메모장 → .html로 저장 → 더블클릭, 네 번이면 앱이 태어난다 크게 보기">
         <img src="assets/thumbs/s13.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 13 — 복사 → 메모장 → .html로 저장 → 더블클릭, 네 번이면 앱이 태어난다">
-        <figcaption><span class="num">13</span><span class="cap">복사 → 메모장 → .html로 저장 → 더블클릭, 네 번이면 앱이 태어난다</span></figcaption>
+        <figcaption><span class="num">13</span><span class="cap">복사 → 메모장 → .html로 저장 → 더블클릭, 네 번이면 앱이 태어난다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="13"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 14 코드 한 줄 치지 않았는데 작동하는 도구가 생겼다 크게 보기">
         <img src="assets/thumbs/s14.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 14 — 코드 한 줄 치지 않았는데 작동하는 도구가 생겼다">
-        <figcaption><span class="num">14</span><span class="cap">코드 한 줄 치지 않았는데 작동하는 도구가 생겼다</span></figcaption>
+        <figcaption><span class="num">14</span><span class="cap">코드 한 줄 치지 않았는데 작동하는 도구가 생겼다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="14"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 15 HTML은 설계도, CSS는 인테리어, JavaScript는 점원이다 크게 보기">
         <img src="assets/thumbs/s15.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 15 — HTML은 설계도, CSS는 인테리어, JavaScript는 점원이다">
-        <figcaption><span class="num">15</span><span class="cap">HTML은 설계도, CSS는 인테리어, JavaScript는 점원이다</span></figcaption>
+        <figcaption><span class="num">15</span><span class="cap">HTML은 설계도, CSS는 인테리어, JavaScript는 점원이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="15"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 16 로컬 스토리지는 그 기기 안에서만 열리는 작은 창고다 크게 보기">
         <img src="assets/thumbs/s16.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 16 — 로컬 스토리지는 그 기기 안에서만 열리는 작은 창고다">
-        <figcaption><span class="num">16</span><span class="cap">로컬 스토리지는 그 기기 안에서만 열리는 작은 창고다</span></figcaption>
+        <figcaption><span class="num">16</span><span class="cap">로컬 스토리지는 그 기기 안에서만 열리는 작은 창고다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="16"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 17 내 컴퓨터에서만 열리는 파일은 아직 서비스가 아니다 크게 보기">
         <img src="assets/thumbs/s17.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 17 — 내 컴퓨터에서만 열리는 파일은 아직 서비스가 아니다">
-        <figcaption><span class="num">17</span><span class="cap">내 컴퓨터에서만 열리는 파일은 아직 서비스가 아니다</span></figcaption>
+        <figcaption><span class="num">17</span><span class="cap">내 컴퓨터에서만 열리는 파일은 아직 서비스가 아니다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="17"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 18 Lovable은 대화로 주문받는 풀스택 앱 빌더다 크게 보기">
         <img src="assets/thumbs/s18.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 18 — Lovable은 대화로 주문받는 풀스택 앱 빌더다">
-        <figcaption><span class="num">18</span><span class="cap">Lovable은 대화로 주문받는 풀스택 앱 빌더다</span></figcaption>
+        <figcaption><span class="num">18</span><span class="cap">Lovable은 대화로 주문받는 풀스택 앱 빌더다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="18"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 19 화면만 주문하지 말고, 데이터 구조까지 함께 주문하라 크게 보기">
         <img src="assets/thumbs/s19.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 19 — 화면만 주문하지 말고, 데이터 구조까지 함께 주문하라">
-        <figcaption><span class="num">19</span><span class="cap">화면만 주문하지 말고, 데이터 구조까지 함께 주문하라</span></figcaption>
+        <figcaption><span class="num">19</span><span class="cap">화면만 주문하지 말고, 데이터 구조까지 함께 주문하라</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="19"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 20 Publish 버튼 하나가 내 파일을 개업한 가게로 바꾼다 크게 보기">
         <img src="assets/thumbs/s20.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 20 — Publish 버튼 하나가 내 파일을 개업한 가게로 바꾼다">
-        <figcaption><span class="num">20</span><span class="cap">Publish 버튼 하나가 내 파일을 개업한 가게로 바꾼다</span></figcaption>
+        <figcaption><span class="num">20</span><span class="cap">Publish 버튼 하나가 내 파일을 개업한 가게로 바꾼다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="20"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 21 웹앱은 홀·주방·냉장고·주문서로 이루어진 식당이다 크게 보기">
         <img src="assets/thumbs/s21.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 21 — 웹앱은 홀·주방·냉장고·주문서로 이루어진 식당이다">
-        <figcaption><span class="num">21</span><span class="cap">웹앱은 홀·주방·냉장고·주문서로 이루어진 식당이다</span></figcaption>
+        <figcaption><span class="num">21</span><span class="cap">웹앱은 홀·주방·냉장고·주문서로 이루어진 식당이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part1" data-index="21"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 22 여기까지 답할 수 있습니까 — PART 01 크게 보기">
         <img src="assets/thumbs/s22.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 22 — 여기까지 답할 수 있습니까 — PART 01">
-        <figcaption><span class="num">22</span><span class="cap">여기까지 답할 수 있습니까 — PART 01</span></figcaption>
+        <figcaption><span class="num">22</span><span class="cap">여기까지 답할 수 있습니까 — PART 01</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="22"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 23 Part 02 앱에 지식을 더하다 크게 보기">
         <img src="assets/thumbs/s23.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 23 — Part 02 앱에 지식을 더하다">
-        <figcaption><span class="num">23</span><span class="cap">Part 02 앱에 지식을 더하다</span></figcaption>
+        <figcaption><span class="num">23</span><span class="cap">Part 02 앱에 지식을 더하다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="23"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 24 우리가 만든 앱은 아직 고립된 섬이다 크게 보기">
         <img src="assets/thumbs/s24.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 24 — 우리가 만든 앱은 아직 고립된 섬이다">
-        <figcaption><span class="num">24</span><span class="cap">우리가 만든 앱은 아직 고립된 섬이다</span></figcaption>
+        <figcaption><span class="num">24</span><span class="cap">우리가 만든 앱은 아직 고립된 섬이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="24"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 25 API는 사람이 아니라 기계들끼리 쓰는 대화 창구다 크게 보기">
         <img src="assets/thumbs/s25.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 25 — API는 사람이 아니라 기계들끼리 쓰는 대화 창구다">
-        <figcaption><span class="num">25</span><span class="cap">API는 사람이 아니라 기계들끼리 쓰는 대화 창구다</span></figcaption>
+        <figcaption><span class="num">25</span><span class="cap">API는 사람이 아니라 기계들끼리 쓰는 대화 창구다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="25"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 26 서버는 전체를 열지 않고, 허락한 것만 건넨다 크게 보기">
         <img src="assets/thumbs/s26.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 26 — 서버는 전체를 열지 않고, 허락한 것만 건넨다">
-        <figcaption><span class="num">26</span><span class="cap">서버는 전체를 열지 않고, 허락한 것만 건넨다</span></figcaption>
+        <figcaption><span class="num">26</span><span class="cap">서버는 전체를 열지 않고, 허락한 것만 건넨다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="26"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 27 API가 돌려주는 건 표가 아니라 이름표 붙은 텍스트 덩어리다 크게 보기">
         <img src="assets/thumbs/s27.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 27 — API가 돌려주는 건 표가 아니라 이름표 붙은 텍스트 덩어리다">
-        <figcaption><span class="num">27</span><span class="cap">API가 돌려주는 건 표가 아니라 이름표 붙은 텍스트 덩어리다</span></figcaption>
+        <figcaption><span class="num">27</span><span class="cap">API가 돌려주는 건 표가 아니라 이름표 붙은 텍스트 덩어리다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="27"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 28 DDISH_NM이 요리명이라는 걸 알면 프롬프트가 달라진다 크게 보기">
         <img src="assets/thumbs/s28.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 28 — DDISH_NM이 요리명이라는 걸 알면 프롬프트가 달라진다">
-        <figcaption><span class="num">28</span><span class="cap">DDISH_NM이 요리명이라는 걸 알면 프롬프트가 달라진다</span></figcaption>
+        <figcaption><span class="num">28</span><span class="cap">DDISH_NM이 요리명이라는 걸 알면 프롬프트가 달라진다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="28"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 29 국가가 이미 지어 둔 데이터 생태계를 부품처럼 가져다 쓴다 크게 보기">
         <img src="assets/thumbs/s29.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 29 — 국가가 이미 지어 둔 데이터 생태계를 부품처럼 가져다 쓴다">
-        <figcaption><span class="num">29</span><span class="cap">국가가 이미 지어 둔 데이터 생태계를 부품처럼 가져다 쓴다</span></figcaption>
+        <figcaption><span class="num">29</span><span class="cap">국가가 이미 지어 둔 데이터 생태계를 부품처럼 가져다 쓴다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="29"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 30 프론트엔드는 홀, 백엔드는 주방, API는 종업원과 주문서다 크게 보기">
         <img src="assets/thumbs/s30.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 30 — 프론트엔드는 홀, 백엔드는 주방, API는 종업원과 주문서다">
-        <figcaption><span class="num">30</span><span class="cap">프론트엔드는 홀, 백엔드는 주방, API는 종업원과 주문서다</span></figcaption>
+        <figcaption><span class="num">30</span><span class="cap">프론트엔드는 홀, 백엔드는 주방, API는 종업원과 주문서다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="30"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 31 인증 키는 서버로 들어가는 디지털 교직원증이다 크게 보기">
         <img src="assets/thumbs/s31.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 31 — 인증 키는 서버로 들어가는 디지털 교직원증이다">
-        <figcaption><span class="num">31</span><span class="cap">인증 키는 서버로 들어가는 디지털 교직원증이다</span></figcaption>
+        <figcaption><span class="num">31</span><span class="cap">인증 키는 서버로 들어가는 디지털 교직원증이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="31"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 32 프롬프트 한 문단이 급식 조회 앱이 된다 크게 보기">
         <img src="assets/thumbs/s32.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 32 — 프롬프트 한 문단이 급식 조회 앱이 된다">
-        <figcaption><span class="num">32</span><span class="cap">프롬프트 한 문단이 급식 조회 앱이 된다</span></figcaption>
+        <figcaption><span class="num">32</span><span class="cap">프롬프트 한 문단이 급식 조회 앱이 된다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="32"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 33 완성이 아니라 개선이 바이브 코딩의 본체다 크게 보기">
         <img src="assets/thumbs/s33.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 33 — 완성이 아니라 개선이 바이브 코딩의 본체다">
-        <figcaption><span class="num">33</span><span class="cap">완성이 아니라 개선이 바이브 코딩의 본체다</span></figcaption>
+        <figcaption><span class="num">33</span><span class="cap">완성이 아니라 개선이 바이브 코딩의 본체다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="33"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 34 프롬프트에 세 가지만 넣으면 API 코드는 AI가 쓴다 크게 보기">
         <img src="assets/thumbs/s34.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 34 — 프롬프트에 세 가지만 넣으면 API 코드는 AI가 쓴다">
-        <figcaption><span class="num">34</span><span class="cap">프롬프트에 세 가지만 넣으면 API 코드는 AI가 쓴다</span></figcaption>
+        <figcaption><span class="num">34</span><span class="cap">프롬프트에 세 가지만 넣으면 API 코드는 AI가 쓴다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="34"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 35 글자를 모르는 아이는 챗봇에게 질문할 수 없다 크게 보기">
         <img src="assets/thumbs/s35.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 35 — 글자를 모르는 아이는 챗봇에게 질문할 수 없다">
-        <figcaption><span class="num">35</span><span class="cap">글자를 모르는 아이는 챗봇에게 질문할 수 없다</span></figcaption>
+        <figcaption><span class="num">35</span><span class="cap">글자를 모르는 아이는 챗봇에게 질문할 수 없다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="35"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 36 앱에 눈과 두뇌와 입을 하나씩 달아 준다 크게 보기">
         <img src="assets/thumbs/s36.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 36 — 앱에 눈과 두뇌와 입을 하나씩 달아 준다">
-        <figcaption><span class="num">36</span><span class="cap">앱에 눈과 두뇌와 입을 하나씩 달아 준다</span></figcaption>
+        <figcaption><span class="num">36</span><span class="cap">앱에 눈과 두뇌와 입을 하나씩 달아 준다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="36"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 37 사물을 비추면 &#39;Mug&#39;가 뜨고 소리가 난다 크게 보기">
         <img src="assets/thumbs/s37.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 37 — 사물을 비추면 &#39;Mug&#39;가 뜨고 소리가 난다">
-        <figcaption><span class="num">37</span><span class="cap">사물을 비추면 &#39;Mug&#39;가 뜨고 소리가 난다</span></figcaption>
+        <figcaption><span class="num">37</span><span class="cap">사물을 비추면 &#39;Mug&#39;가 뜨고 소리가 난다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="37"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 38 지시문 한 줄만 바꾸면 전혀 다른 앱이 된다 크게 보기">
         <img src="assets/thumbs/s38.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 38 — 지시문 한 줄만 바꾸면 전혀 다른 앱이 된다">
-        <figcaption><span class="num">38</span><span class="cap">지시문 한 줄만 바꾸면 전혀 다른 앱이 된다</span></figcaption>
+        <figcaption><span class="num">38</span><span class="cap">지시문 한 줄만 바꾸면 전혀 다른 앱이 된다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="38"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 39 키를 만들려면 프로젝트부터 있어야 한다 크게 보기">
         <img src="assets/thumbs/s39.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 39 — 키를 만들려면 프로젝트부터 있어야 한다">
-        <figcaption><span class="num">39</span><span class="cap">키를 만들려면 프로젝트부터 있어야 한다</span></figcaption>
+        <figcaption><span class="num">39</span><span class="cap">키를 만들려면 프로젝트부터 있어야 한다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="39"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 40 삐뚤빼뚤한 손글씨도 AI는 읽는다 크게 보기">
         <img src="assets/thumbs/s40.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 40 — 삐뚤빼뚤한 손글씨도 AI는 읽는다">
-        <figcaption><span class="num">40</span><span class="cap">삐뚤빼뚤한 손글씨도 AI는 읽는다</span></figcaption>
+        <figcaption><span class="num">40</span><span class="cap">삐뚤빼뚤한 손글씨도 AI는 읽는다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="40"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 41 시스템 프롬프트는 AI에게 주는 배역 설정서다 크게 보기">
         <img src="assets/thumbs/s41.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 41 — 시스템 프롬프트는 AI에게 주는 배역 설정서다">
-        <figcaption><span class="num">41</span><span class="cap">시스템 프롬프트는 AI에게 주는 배역 설정서다</span></figcaption>
+        <figcaption><span class="num">41</span><span class="cap">시스템 프롬프트는 AI에게 주는 배역 설정서다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part2" data-index="41"
                role="button" tabindex="0" style="--pc:#3688C9"
                aria-label="슬라이드 42 프로토타입과 서비스 사이에는 보안·과금·개인정보가 있다 크게 보기">
         <img src="assets/thumbs/s42.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 42 — 프로토타입과 서비스 사이에는 보안·과금·개인정보가 있다">
-        <figcaption><span class="num">42</span><span class="cap">프로토타입과 서비스 사이에는 보안·과금·개인정보가 있다</span></figcaption>
+        <figcaption><span class="num">42</span><span class="cap">프로토타입과 서비스 사이에는 보안·과금·개인정보가 있다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="42"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 43 Part 03 앱에 클라우드 기능을 심다 크게 보기">
         <img src="assets/thumbs/s43.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 43 — Part 03 앱에 클라우드 기능을 심다">
-        <figcaption><span class="num">43</span><span class="cap">Part 03 앱에 클라우드 기능을 심다</span></figcaption>
+        <figcaption><span class="num">43</span><span class="cap">Part 03 앱에 클라우드 기능을 심다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="43"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 44 새로고침 한 번에 사라지는 앱은 아직 서비스가 아니다 크게 보기">
         <img src="assets/thumbs/s44.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 44 — 새로고침 한 번에 사라지는 앱은 아직 서비스가 아니다">
-        <figcaption><span class="num">44</span><span class="cap">새로고침 한 번에 사라지는 앱은 아직 서비스가 아니다</span></figcaption>
+        <figcaption><span class="num">44</span><span class="cap">새로고침 한 번에 사라지는 앱은 아직 서비스가 아니다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="44"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 45 데이터베이스는 교무실 캐비닛이고, 그 속은 엑셀과 똑같이 생겼다 크게 보기">
         <img src="assets/thumbs/s45.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 45 — 데이터베이스는 교무실 캐비닛이고, 그 속은 엑셀과 똑같이 생겼다">
-        <figcaption><span class="num">45</span><span class="cap">데이터베이스는 교무실 캐비닛이고, 그 속은 엑셀과 똑같이 생겼다</span></figcaption>
+        <figcaption><span class="num">45</span><span class="cap">데이터베이스는 교무실 캐비닛이고, 그 속은 엑셀과 똑같이 생겼다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="45"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 46 복잡해 보여도 데이터베이스는 네 가지 주문만 외운다 크게 보기">
         <img src="assets/thumbs/s46.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 46 — 복잡해 보여도 데이터베이스는 네 가지 주문만 외운다">
-        <figcaption><span class="num">46</span><span class="cap">복잡해 보여도 데이터베이스는 네 가지 주문만 외운다</span></figcaption>
+        <figcaption><span class="num">46</span><span class="cap">복잡해 보여도 데이터베이스는 네 가지 주문만 외운다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="46"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 47 백엔드는 이제 짓는 것이 아니라 빌려 쓰는 것이다 크게 보기">
         <img src="assets/thumbs/s47.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 47 — 백엔드는 이제 짓는 것이 아니라 빌려 쓰는 것이다">
-        <figcaption><span class="num">47</span><span class="cap">백엔드는 이제 짓는 것이 아니라 빌려 쓰는 것이다</span></figcaption>
+        <figcaption><span class="num">47</span><span class="cap">백엔드는 이제 짓는 것이 아니라 빌려 쓰는 것이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="47"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 48 Airtable·Firebase·Supabase, 셋의 차이는 성능이 아니라 용도다 크게 보기">
         <img src="assets/thumbs/s48.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 48 — Airtable·Firebase·Supabase, 셋의 차이는 성능이 아니라 용도다">
-        <figcaption><span class="num">48</span><span class="cap">Airtable·Firebase·Supabase, 셋의 차이는 성능이 아니라 용도다</span></figcaption>
+        <figcaption><span class="num">48</span><span class="cap">Airtable·Firebase·Supabase, 셋의 차이는 성능이 아니라 용도다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="48"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 49 데이터 본부부터 세운다 — 마스터 키와 Seoul을 잊지 말 것 크게 보기">
         <img src="assets/thumbs/s49.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 49 — 데이터 본부부터 세운다 — 마스터 키와 Seoul을 잊지 말 것">
-        <figcaption><span class="num">49</span><span class="cap">데이터 본부부터 세운다 — 마스터 키와 Seoul을 잊지 말 것</span></figcaption>
+        <figcaption><span class="num">49</span><span class="cap">데이터 본부부터 세운다 — 마스터 키와 Seoul을 잊지 말 것</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="49"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 50 프론트엔드가 백엔드로 들어가려면 출입증 두 장이 필요하다 크게 보기">
         <img src="assets/thumbs/s50.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 50 — 프론트엔드가 백엔드로 들어가려면 출입증 두 장이 필요하다">
-        <figcaption><span class="num">50</span><span class="cap">프론트엔드가 백엔드로 들어가려면 출입증 두 장이 필요하다</span></figcaption>
+        <figcaption><span class="num">50</span><span class="cap">프론트엔드가 백엔드로 들어가려면 출입증 두 장이 필요하다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="50"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 51 프롬프트 한 장에 화면·테이블·CRUD를 한꺼번에 시킨다 크게 보기">
         <img src="assets/thumbs/s51.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 51 — 프롬프트 한 장에 화면·테이블·CRUD를 한꺼번에 시킨다">
-        <figcaption><span class="num">51</span><span class="cap">프롬프트 한 장에 화면·테이블·CRUD를 한꺼번에 시킨다</span></figcaption>
+        <figcaption><span class="num">51</span><span class="cap">프롬프트 한 장에 화면·테이블·CRUD를 한꺼번에 시킨다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="51"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 52 AI가 써 준 설계도를 붙여넣고 Run — 테이블로 가는 길은 두 갈래다 크게 보기">
         <img src="assets/thumbs/s52.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 52 — AI가 써 준 설계도를 붙여넣고 Run — 테이블로 가는 길은 두 갈래다">
-        <figcaption><span class="num">52</span><span class="cap">AI가 써 준 설계도를 붙여넣고 Run — 테이블로 가는 길은 두 갈래다</span></figcaption>
+        <figcaption><span class="num">52</span><span class="cap">AI가 써 준 설계도를 붙여넣고 Run — 테이블로 가는 길은 두 갈래다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="52"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 53 클라우드에 남는 순간, 프로그램은 서비스가 된다 크게 보기">
         <img src="assets/thumbs/s53.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 53 — 클라우드에 남는 순간, 프로그램은 서비스가 된다">
-        <figcaption><span class="num">53</span><span class="cap">클라우드에 남는 순간, 프로그램은 서비스가 된다</span></figcaption>
+        <figcaption><span class="num">53</span><span class="cap">클라우드에 남는 순간, 프로그램은 서비스가 된다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="53"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 54 지금 이 앱은 문이 열린 금고다 크게 보기">
         <img src="assets/thumbs/s54.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 54 — 지금 이 앱은 문이 열린 금고다">
-        <figcaption><span class="num">54</span><span class="cap">지금 이 앱은 문이 열린 금고다</span></figcaption>
+        <figcaption><span class="num">54</span><span class="cap">지금 이 앱은 문이 열린 금고다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part3" data-index="54"
                role="button" tabindex="0" style="--pc:#4A3E8F"
                aria-label="슬라이드 55 RLS는 금고실 문이 아니라 상자마다 채우는 자물쇠다 크게 보기">
         <img src="assets/thumbs/s55.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 55 — RLS는 금고실 문이 아니라 상자마다 채우는 자물쇠다">
-        <figcaption><span class="num">55</span><span class="cap">RLS는 금고실 문이 아니라 상자마다 채우는 자물쇠다</span></figcaption>
+        <figcaption><span class="num">55</span><span class="cap">RLS는 금고실 문이 아니라 상자마다 채우는 자물쇠다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="55"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 56 Part 04 로컬 환경에서 진짜 개발자처럼 일하기 크게 보기">
         <img src="assets/thumbs/s56.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 56 — Part 04 로컬 환경에서 진짜 개발자처럼 일하기">
-        <figcaption><span class="num">56</span><span class="cap">Part 04 로컬 환경에서 진짜 개발자처럼 일하기</span></figcaption>
+        <figcaption><span class="num">56</span><span class="cap">Part 04 로컬 환경에서 진짜 개발자처럼 일하기</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="56"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 57 편리한 공유 오피스에는 내 이름표가 없다 크게 보기">
         <img src="assets/thumbs/s57.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 57 — 편리한 공유 오피스에는 내 이름표가 없다">
-        <figcaption><span class="num">57</span><span class="cap">편리한 공유 오피스에는 내 이름표가 없다</span></figcaption>
+        <figcaption><span class="num">57</span><span class="cap">편리한 공유 오피스에는 내 이름표가 없다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="57"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 58 로컬로 내려와야 하는 이유는 딱 세 가지다 크게 보기">
         <img src="assets/thumbs/s58.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 58 — 로컬로 내려와야 하는 이유는 딱 세 가지다">
-        <figcaption><span class="num">58</span><span class="cap">로컬로 내려와야 하는 이유는 딱 세 가지다</span></figcaption>
+        <figcaption><span class="num">58</span><span class="cap">로컬로 내려와야 하는 이유는 딱 세 가지다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="58"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 59 IDE는 코딩을 위한 최신식 주방이다 크게 보기">
         <img src="assets/thumbs/s59.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 59 — IDE는 코딩을 위한 최신식 주방이다">
-        <figcaption><span class="num">59</span><span class="cap">IDE는 코딩을 위한 최신식 주방이다</span></figcaption>
+        <figcaption><span class="num">59</span><span class="cap">IDE는 코딩을 위한 최신식 주방이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="59"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 60 Antigravity는 코드를 제안하지 않고 직접 쓴다 크게 보기">
         <img src="assets/thumbs/s60.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 60 — Antigravity는 코드를 제안하지 않고 직접 쓴다">
-        <figcaption><span class="num">60</span><span class="cap">Antigravity는 코드를 제안하지 않고 직접 쓴다</span></figcaption>
+        <figcaption><span class="num">60</span><span class="cap">Antigravity는 코드를 제안하지 않고 직접 쓴다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="60"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 61 &#39;Add to PATH&#39;를 놓치면 터미널에서 IDE를 못 연다 크게 보기">
         <img src="assets/thumbs/s61.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 61 — &#39;Add to PATH&#39;를 놓치면 터미널에서 IDE를 못 연다">
-        <figcaption><span class="num">61</span><span class="cap">&#39;Add to PATH&#39;를 놓치면 터미널에서 IDE를 못 연다</span></figcaption>
+        <figcaption><span class="num">61</span><span class="cap">&#39;Add to PATH&#39;를 놓치면 터미널에서 IDE를 못 연다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="61"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 62 실제로 쓰는 영역은 딱 두 곳이다 크게 보기">
         <img src="assets/thumbs/s62.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 62 — 실제로 쓰는 영역은 딱 두 곳이다">
-        <figcaption><span class="num">62</span><span class="cap">실제로 쓰는 영역은 딱 두 곳이다</span></figcaption>
+        <figcaption><span class="num">62</span><span class="cap">실제로 쓰는 영역은 딱 두 곳이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="62"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 63 첫 프로젝트는 문장 하나로 시작한다 크게 보기">
         <img src="assets/thumbs/s63.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 63 — 첫 프로젝트는 문장 하나로 시작한다">
-        <figcaption><span class="num">63</span><span class="cap">첫 프로젝트는 문장 하나로 시작한다</span></figcaption>
+        <figcaption><span class="num">63</span><span class="cap">첫 프로젝트는 문장 하나로 시작한다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="63"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 64 localhost는 아파트 이름이고, 포트는 호수다 크게 보기">
         <img src="assets/thumbs/s64.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 64 — localhost는 아파트 이름이고, 포트는 호수다">
-        <figcaption><span class="num">64</span><span class="cap">localhost는 아파트 이름이고, 포트는 호수다</span></figcaption>
+        <figcaption><span class="num">64</span><span class="cap">localhost는 아파트 이름이고, 포트는 호수다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="64"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 65 로컬은 비밀 주방, 배포는 정식 오픈이다 크게 보기">
         <img src="assets/thumbs/s65.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 65 — 로컬은 비밀 주방, 배포는 정식 오픈이다">
-        <figcaption><span class="num">65</span><span class="cap">로컬은 비밀 주방, 배포는 정식 오픈이다</span></figcaption>
+        <figcaption><span class="num">65</span><span class="cap">로컬은 비밀 주방, 배포는 정식 오픈이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="65"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 66 Node.js는 공구함, npm은 앱 마켓, Vite는 모델하우스다 크게 보기">
         <img src="assets/thumbs/s66.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 66 — Node.js는 공구함, npm은 앱 마켓, Vite는 모델하우스다">
-        <figcaption><span class="num">66</span><span class="cap">Node.js는 공구함, npm은 앱 마켓, Vite는 모델하우스다</span></figcaption>
+        <figcaption><span class="num">66</span><span class="cap">Node.js는 공구함, npm은 앱 마켓, Vite는 모델하우스다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="66"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 67 명령어 네 줄이면 내 컴퓨터가 개발 서버가 된다 크게 보기">
         <img src="assets/thumbs/s67.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 67 — 명령어 네 줄이면 내 컴퓨터가 개발 서버가 된다">
-        <figcaption><span class="num">67</span><span class="cap">명령어 네 줄이면 내 컴퓨터가 개발 서버가 된다</span></figcaption>
+        <figcaption><span class="num">67</span><span class="cap">명령어 네 줄이면 내 컴퓨터가 개발 서버가 된다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="67"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 68 저장하는 순간 화면이 바뀐다 크게 보기">
         <img src="assets/thumbs/s68.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 68 — 저장하는 순간 화면이 바뀐다">
-        <figcaption><span class="num">68</span><span class="cap">저장하는 순간 화면이 바뀐다</span></figcaption>
+        <figcaption><span class="num">68</span><span class="cap">저장하는 순간 화면이 바뀐다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="68"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 69 오류는 실패가 아니라 예정된 순서다 크게 보기">
         <img src="assets/thumbs/s69.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 69 — 오류는 실패가 아니라 예정된 순서다">
-        <figcaption><span class="num">69</span><span class="cap">오류는 실패가 아니라 예정된 순서다</span></figcaption>
+        <figcaption><span class="num">69</span><span class="cap">오류는 실패가 아니라 예정된 순서다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="69"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 70 &#39;진짜최종_이게맞음.hwp&#39;는 버전 관리가 아니다 크게 보기">
         <img src="assets/thumbs/s70.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 70 — &#39;진짜최종_이게맞음.hwp&#39;는 버전 관리가 아니다">
-        <figcaption><span class="num">70</span><span class="cap">&#39;진짜최종_이게맞음.hwp&#39;는 버전 관리가 아니다</span></figcaption>
+        <figcaption><span class="num">70</span><span class="cap">&#39;진짜최종_이게맞음.hwp&#39;는 버전 관리가 아니다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="70"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 71 Git은 일기장, GitHub는 금고, Desktop은 열쇠꾸러미다 크게 보기">
         <img src="assets/thumbs/s71.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 71 — Git은 일기장, GitHub는 금고, Desktop은 열쇠꾸러미다">
-        <figcaption><span class="num">71</span><span class="cap">Git은 일기장, GitHub는 금고, Desktop은 열쇠꾸러미다</span></figcaption>
+        <figcaption><span class="num">71</span><span class="cap">Git은 일기장, GitHub는 금고, Desktop은 열쇠꾸러미다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="71"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 72 커밋은 보스전 직전의 세이브다 크게 보기">
         <img src="assets/thumbs/s72.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 72 — 커밋은 보스전 직전의 세이브다">
-        <figcaption><span class="num">72</span><span class="cap">커밋은 보스전 직전의 세이브다</span></figcaption>
+        <figcaption><span class="num">72</span><span class="cap">커밋은 보스전 직전의 세이브다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="72"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 73 일부러 망가뜨려 봐야 안전망을 믿게 된다 크게 보기">
         <img src="assets/thumbs/s73.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 73 — 일부러 망가뜨려 봐야 안전망을 믿게 된다">
-        <figcaption><span class="num">73</span><span class="cap">일부러 망가뜨려 봐야 안전망을 믿게 된다</span></figcaption>
+        <figcaption><span class="num">73</span><span class="cap">일부러 망가뜨려 봐야 안전망을 믿게 된다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="73"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 74 한 줄 고치고 Push했을 뿐인데 세계가 바뀐다 크게 보기">
         <img src="assets/thumbs/s74.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 74 — 한 줄 고치고 Push했을 뿐인데 세계가 바뀐다">
-        <figcaption><span class="num">74</span><span class="cap">한 줄 고치고 Push했을 뿐인데 세계가 바뀐다</span></figcaption>
+        <figcaption><span class="num">74</span><span class="cap">한 줄 고치고 Push했을 뿐인데 세계가 바뀐다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="part4" data-index="74"
                role="button" tabindex="0" style="--pc:#6356A2"
                aria-label="슬라이드 75 MCP는 AI를 말하는 존재에서 행동하는 존재로 바꾼 표준이다 크게 보기">
         <img src="assets/thumbs/s75.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 75 — MCP는 AI를 말하는 존재에서 행동하는 존재로 바꾼 표준이다">
-        <figcaption><span class="num">75</span><span class="cap">MCP는 AI를 말하는 존재에서 행동하는 존재로 바꾼 표준이다</span></figcaption>
+        <figcaption><span class="num">75</span><span class="cap">MCP는 AI를 말하는 존재에서 행동하는 존재로 바꾼 표준이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="appendix" data-index="75"
                role="button" tabindex="0" style="--pc:#E85297"
                aria-label="슬라이드 76 부록 그 밖의 인공지능 도구들 크게 보기">
         <img src="assets/thumbs/s76.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 76 — 부록 그 밖의 인공지능 도구들">
-        <figcaption><span class="num">76</span><span class="cap">부록 그 밖의 인공지능 도구들</span></figcaption>
+        <figcaption><span class="num">76</span><span class="cap">부록 그 밖의 인공지능 도구들</span></figcaption>
       </figure>
       <figure class="thumb" data-part="appendix" data-index="76"
                role="button" tabindex="0" style="--pc:#E85297"
                aria-label="슬라이드 77 도구는 계속 바뀐다 — 그래서 부록은 소개와 설치만 다룬다 크게 보기">
         <img src="assets/thumbs/s77.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 77 — 도구는 계속 바뀐다 — 그래서 부록은 소개와 설치만 다룬다">
-        <figcaption><span class="num">77</span><span class="cap">도구는 계속 바뀐다 — 그래서 부록은 소개와 설치만 다룬다</span></figcaption>
+        <figcaption><span class="num">77</span><span class="cap">도구는 계속 바뀐다 — 그래서 부록은 소개와 설치만 다룬다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="appendix" data-index="77"
                role="button" tabindex="0" style="--pc:#E85297"
                aria-label="슬라이드 78 Cursor는 VS Code를 통째로 포크했다 크게 보기">
         <img src="assets/thumbs/s78.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 78 — Cursor는 VS Code를 통째로 포크했다">
-        <figcaption><span class="num">78</span><span class="cap">Cursor는 VS Code를 통째로 포크했다</span></figcaption>
+        <figcaption><span class="num">78</span><span class="cap">Cursor는 VS Code를 통째로 포크했다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="appendix" data-index="78"
                role="button" tabindex="0" style="--pc:#E85297"
                aria-label="슬라이드 79 Cursor의 무기는 다섯 가지다 크게 보기">
         <img src="assets/thumbs/s79.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 79 — Cursor의 무기는 다섯 가지다">
-        <figcaption><span class="num">79</span><span class="cap">Cursor의 무기는 다섯 가지다</span></figcaption>
+        <figcaption><span class="num">79</span><span class="cap">Cursor의 무기는 다섯 가지다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="appendix" data-index="79"
                role="button" tabindex="0" style="--pc:#E85297"
                aria-label="슬라이드 80 설치는 여섯 단계 — 진짜 관문은 4단계 [IDE] 버튼이다 크게 보기">
         <img src="assets/thumbs/s80.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 80 — 설치는 여섯 단계 — 진짜 관문은 4단계 [IDE] 버튼이다">
-        <figcaption><span class="num">80</span><span class="cap">설치는 여섯 단계 — 진짜 관문은 4단계 [IDE] 버튼이다</span></figcaption>
+        <figcaption><span class="num">80</span><span class="cap">설치는 여섯 단계 — 진짜 관문은 4단계 [IDE] 버튼이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="appendix" data-index="80"
                role="button" tabindex="0" style="--pc:#E85297"
                aria-label="슬라이드 81 &quot;회원가입 만들어줘&quot;는 실패한다 — 구체적으로 말하고 Diff를 읽어라 크게 보기">
         <img src="assets/thumbs/s81.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 81 — &quot;회원가입 만들어줘&quot;는 실패한다 — 구체적으로 말하고 Diff를 읽어라">
-        <figcaption><span class="num">81</span><span class="cap">&quot;회원가입 만들어줘&quot;는 실패한다 — 구체적으로 말하고 Diff를 읽어라</span></figcaption>
+        <figcaption><span class="num">81</span><span class="cap">&quot;회원가입 만들어줘&quot;는 실패한다 — 구체적으로 말하고 Diff를 읽어라</span></figcaption>
       </figure>
       <figure class="thumb" data-part="appendix" data-index="81"
                role="button" tabindex="0" style="--pc:#E85297"
                aria-label="슬라이드 82 Claude Code는 IDE를 버리고 터미널로 갔다 크게 보기">
         <img src="assets/thumbs/s82.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 82 — Claude Code는 IDE를 버리고 터미널로 갔다">
-        <figcaption><span class="num">82</span><span class="cap">Claude Code는 IDE를 버리고 터미널로 갔다</span></figcaption>
+        <figcaption><span class="num">82</span><span class="cap">Claude Code는 IDE를 버리고 터미널로 갔다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="appendix" data-index="82"
                role="button" tabindex="0" style="--pc:#E85297"
                aria-label="슬라이드 83 설치는 PowerShell 한 줄이다 크게 보기">
         <img src="assets/thumbs/s83.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 83 — 설치는 PowerShell 한 줄이다">
-        <figcaption><span class="num">83</span><span class="cap">설치는 PowerShell 한 줄이다</span></figcaption>
+        <figcaption><span class="num">83</span><span class="cap">설치는 PowerShell 한 줄이다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="closing" data-index="83"
                role="button" tabindex="0" style="--pc:#231815"
                aria-label="슬라이드 84 실력은 코드를 쓰는 손이 아니라, 문제를 정확히 설명하는 입에서 나온다 크게 보기">
         <img src="assets/thumbs/s84.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 84 — 실력은 코드를 쓰는 손이 아니라, 문제를 정확히 설명하는 입에서 나온다">
-        <figcaption><span class="num">84</span><span class="cap">실력은 코드를 쓰는 손이 아니라, 문제를 정확히 설명하는 입에서 나온다</span></figcaption>
+        <figcaption><span class="num">84</span><span class="cap">실력은 코드를 쓰는 손이 아니라, 문제를 정확히 설명하는 입에서 나온다</span></figcaption>
       </figure>
       <figure class="thumb" data-part="closing" data-index="84"
                role="button" tabindex="0" style="--pc:#231815"
                aria-label="슬라이드 85 내일 아침, 가장 자주 나오는 한숨 하나를 받아 적으세요 크게 보기">
         <img src="assets/thumbs/s85.webp" width="520" height="293" loading="lazy" decoding="async"
              alt="슬라이드 85 — 내일 아침, 가장 자주 나오는 한숨 하나를 받아 적으세요">
-        <figcaption><span class="num">85</span><span class="cap">내일 아침, 가장 자주 나오는 한숨 하나를 받아 적으세요</span></figcaption>
+        <figcaption><span class="num">85</span><span class="cap">내일 아침, 가장 자주 나오는 한숨 하나를 받아 적으세요</span></figcaption>
       </figure>
     </div>
   </div>
@@ -1289,38 +1303,38 @@ footer.foot .fine {
   <div class="wrap">
     <div class="sec-head">
       <p class="sec-label">자료 받기</p>
-      <h2>PDF로 받아 가세요</h2>
-      <p>전체 한 벌과 파트별 다섯 벌을 준비했습니다. 슬라이드마다 발표 노트가 들어 있는 PPTX가 필요하면 강의자에게 요청하세요.</p>
+      <h2>PDF로 받아 가세요</h2>
+      
     </div>
     <div class="dl-list">
     <a class="dl" href="pdf/vibecoding-full.pdf" download>
       <span class="ic" aria-hidden="true">PDF</span>
-      <span class="t"><b>전체 — 85장 한 벌</b><span>도입부터 클로징까지 통합본</span></span>
+      <span class="t"><b>전체 — 85장 한 벌</b><span>도입부터 클로징까지 통합본</span></span>
       <span class="sz">32.1MB</span>
     </a>
     <a class="dl" href="pdf/part1-아이디어를-서비스로.pdf" download>
       <span class="ic" aria-hidden="true">PDF</span>
-      <span class="t"><b>Part 01 아이디어를 서비스로 전환하는 첫걸음</b><span>슬라이드 4–22</span></span>
+      <span class="t"><b>Part 01 아이디어를 서비스로 전환하는 첫걸음</b><span>슬라이드 4–22</span></span>
       <span class="sz">10.4MB</span>
     </a>
     <a class="dl" href="pdf/part2-앱에-지식을-더하다.pdf" download>
       <span class="ic" aria-hidden="true">PDF</span>
-      <span class="t"><b>Part 02 앱에 지식을 더하다</b><span>슬라이드 23–42</span></span>
+      <span class="t"><b>Part 02 앱에 지식을 더하다</b><span>슬라이드 23–42</span></span>
       <span class="sz">7.0MB</span>
     </a>
     <a class="dl" href="pdf/part3-앱에-클라우드를-심다.pdf" download>
       <span class="ic" aria-hidden="true">PDF</span>
-      <span class="t"><b>Part 03 앱에 클라우드 기능을 심다</b><span>슬라이드 43–55</span></span>
+      <span class="t"><b>Part 03 앱에 클라우드 기능을 심다</b><span>슬라이드 43–55</span></span>
       <span class="sz">3.9MB</span>
     </a>
     <a class="dl" href="pdf/part4-진짜-개발자처럼.pdf" download>
       <span class="ic" aria-hidden="true">PDF</span>
-      <span class="t"><b>Part 04 로컬 환경에서 진짜 개발자처럼 일하기</b><span>슬라이드 56–75</span></span>
+      <span class="t"><b>Part 04 로컬 환경에서 진짜 개발자처럼 일하기</b><span>슬라이드 56–75</span></span>
       <span class="sz">6.8MB</span>
     </a>
     <a class="dl" href="pdf/appendix-그-밖의-AI-도구들.pdf" download>
       <span class="ic" aria-hidden="true">PDF</span>
-      <span class="t"><b>부록 그 밖의 인공지능 도구들</b><span>슬라이드 76–83</span></span>
+      <span class="t"><b>부록 그 밖의 인공지능 도구들</b><span>슬라이드 76–83</span></span>
       <span class="sz">3.1MB</span>
     </a>
     </div>
@@ -1330,28 +1344,28 @@ footer.foot .fine {
   <div class="wrap">
     <div class="sec-head">
       <p class="sec-label">교재</p>
-      <h2>오늘 다룬 내용은 책 한 권에 담겨 있습니다</h2>
-      <p>강의는 288쪽을 85장으로 줄인 것입니다. 실습 화면과 프롬프트 전문, 완성 코드는 책에 있습니다.</p>
+      <h2>오늘 다룬 내용은 책 한 권에 담겨 있습니다</h2>
+      <p>강의는 288쪽을 85장으로 줄인 것입니다. 실습 화면과 프롬프트 전문, 완성 코드는 책에 있습니다.</p>
     </div>
     <div class="book">
       <img class="book-cover" src="assets/book-cover.jpg" alt="요즘 교사를 위한 웹앱 만들기 with 바이브 코딩 표지" width="500" height="642" loading="lazy">
       <div class="book-body">
-        <h3>요즘 교사를 위한 웹앱 만들기 with 바이브 코딩</h3>
+        <h3>요즘 교사를 위한 웹앱 만들기 with 바이브 코딩</h3>
         <p class="by">이상선 · 김진관 · 이대형 · 윤신영 · 김상섭 지음</p>
         <p class="bib">한빛미디어 · 2026년 9월 10일 · 288쪽 · 22,000원</p>
-        <p class="blurb">제미나이·Lovable·Cursor·안티그래비티부터 GitHub·Vercel·Supabase까지, 코딩 없이 대화만으로 완성하고 배포하는 교실 웹서비스. 2022 개정 교육과정을 반영했고 실습 프롬프트와 완성 코드를 함께 제공합니다.</p>
+        <p class="blurb">제미나이·Lovable·Cursor·안티그래비티부터 GitHub·Vercel·Supabase까지, 코딩 없이 대화만으로 완성하고 배포하는 교실 웹서비스. 2022 개정 교육과정을 반영했고 실습 프롬프트와 완성 코드를 함께 제공합니다.</p>
         <ul class="book-points">
-        <li>우리 반 &#39;칭찬 보드&#39; 앱 만들기</li>
-        <li>학생 이름만 넣으면 되는 &#39;급식 알리미&#39; 앱 만들기</li>
-        <li>우리 반 &#39;글쓰기 SNS&#39; 만들어 학생과 나누기</li>
-        <li>모둠이 함께 쓰는 &#39;실시간 협업 보드&#39; 만들기</li>
-        <li>사진 찍으면 알려주는 &#39;AI 학습 앱&#39; 만들기</li>
-        <li>만든 앱, 링크 하나로 학생에게 공유하기</li>
+        <li>우리 반 &#39;칭찬 보드&#39; 앱 만들기</li>
+        <li>학생 이름만 넣으면 되는 &#39;급식 알리미&#39; 앱 만들기</li>
+        <li>우리 반 &#39;글쓰기 SNS&#39; 만들어 학생과 나누기</li>
+        <li>모둠이 함께 쓰는 &#39;실시간 협업 보드&#39; 만들기</li>
+        <li>사진 찍으면 알려주는 &#39;AI 학습 앱&#39; 만들기</li>
+        <li>만든 앱, 링크 하나로 학생에게 공유하기</li>
         </ul>
         <div class="buy">
-        <a href="https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=401489334" target="_blank" rel="noopener" class="primary">알라딘에서 보기</a>
+        <a href="https://www.yes24.com/product/goods/196020146" target="_blank" rel="noopener" class="primary">예스24에서 보기</a>
+        <a href="https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=401489334" target="_blank" rel="noopener">알라딘</a>
         <a href="https://search.kyobobook.co.kr/search?keyword=9791175790872" target="_blank" rel="noopener">교보문고</a>
-        <a href="https://www.yes24.com/product/search?query=9791175790872" target="_blank" rel="noopener">예스24</a>
         <a href="https://www.hanbit.co.kr/search/search_list.html?keyword=9791175790872" target="_blank" rel="noopener">한빛미디어</a>
         </div>
       </div>
@@ -1365,12 +1379,12 @@ footer.foot .fine {
     <div class="frow">
       <div>
         <b>강의 자료</b>
-        <div>슬라이드 85장 · 파트별 PDF 6종</div>
-        <div>강의가 끝난 뒤에도 같은 주소로 열립니다.</div>
+        <div>슬라이드 85장 · 파트별 PDF 6종</div>
+        <div>강의가 끝난 뒤에도 같은 주소로 열립니다.</div>
       </div>
       <div>
         <b>교재</b>
-        <div>요즘 교사를 위한 웹앱 만들기 with 바이브 코딩</div>
+        <div>요즘 교사를 위한 웹앱 만들기 with 바이브 코딩</div>
         <div>한빛미디어 · 2026 · ISBN 9791175790872</div>
       </div>
       <div>
@@ -1379,7 +1393,7 @@ footer.foot .fine {
         <button class="print-btn" type="button" id="printBtn">이 페이지 인쇄하기</button>
       </div>
     </div>
-    <p class="fine">이 페이지의 슬라이드는 『요즘 교사를 위한 웹앱 만들기 with 바이브 코딩』(한빛미디어, 2026)을 바탕으로 만든 강의용 자료입니다. 강의 참석자의 학습 목적으로만 사용해 주세요. 표지 이미지의 권리는 한빛미디어에 있습니다.</p>
+    <p class="fine">이 페이지의 슬라이드는 『요즘 교사를 위한 웹앱 만들기 with 바이브 코딩』(한빛미디어, 2026)을 바탕으로 만든 강의용 자료입니다. 강의 참석자의 학습 목적으로만 사용해 주세요. 표지 이미지의 권리는 한빛미디어에 있습니다.</p>
   </div>
 </footer>
 
