@@ -1,0 +1,1653 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>요즘 교사를 위한 웹앱 만들기 with 바이브 코딩 — 강의 자료 · PART 1-4 + 부록</title>
+<meta name="description" content="교실의 불편 하나를 실제로 돌아가는 웹 서비스로 바꾸는 전체 경로. 강의 슬라이드 85장과 파트별 PDF를 여기서 바로 봅니다.">
+<meta name="theme-color" content="#6356A2">
+<meta name="color-scheme" content="light dark">
+<meta property="og:type" content="website">
+<meta property="og:title" content="요즘 교사를 위한 웹앱 만들기 with 바이브 코딩 — 강의 자료 · PART 1-4 + 부록">
+<meta property="og:description" content="교실의 불편 하나를 실제로 돌아가는 웹 서비스로 바꾸는 전체 경로. 강의 슬라이드 85장과 파트별 PDF를 여기서 바로 봅니다.">
+<meta property="og:image" content="https://tigerjk9.github.io/vibecoding-lecture/assets/slides/s1.webp">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='15' fill='%236356A2'/%3E%3Crect x='13' y='17' width='38' height='24' rx='3' fill='%23fff'/%3E%3Crect x='19' y='46' width='26' height='4' rx='2' fill='%23fff' opacity='.7'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+/* ============================================================
+   강의 자료 공유 페이지 — 발표자는 프로젝터로, 참석자는 QR로.
+   색상 토큰은 강의 덱(assets/css/deck.css)에서 그대로 가져온다.
+   한 파일이 어느 강의에나 쓰이도록, 내용은 전부 lecture.config.json이 정한다.
+   ============================================================ */
+
+:root {
+  --lav:        #C8C1E0;
+  --lav-soft:   #EFEEF6;
+  --key:        #6356A2;
+  --key-deep:   #4A3E8F;
+  --key-ink:    #6356A2;   /* 본문 위 링크색 — 다크모드에서 밝게 재정의 */
+  --magenta:    #E85297;
+  --blue:       #3688C9;
+  --highlight:  #F1ED65;
+
+  --ink:        #231815;
+  --ink-2:      #55504E;
+  --ink-3:      #75706B;
+  --paper:      #FBFAFC;
+  --surface:    #FFFFFF;
+  --surface-2:  #F4F2F8;
+  --rule:       #E3E0EC;
+
+  --shadow-1: 0 2px 8px rgba(35,24,21,.05);
+  --shadow-2: 0 8px 24px rgba(35,24,21,.08);
+  --shadow-3: 0 18px 48px rgba(35,24,21,.16);
+
+  --font: 'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont,
+          'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+
+  --gutter: 20px;
+  --maxw: 1140px;
+  --radius: 16px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --lav:       #3B3359;
+    --lav-soft:  #251F38;
+    --key:       #A99BE4;
+    --key-deep:  #C9BEF3;
+    --key-ink:   #B6A9EC;
+    --ink:       #F2EFF6;
+    --ink-2:     #C6C0D2;
+    --ink-3:     #968FA6;
+    --paper:     #14111C;
+    --surface:   #1D1929;
+    --surface-2: #262034;
+    --rule:      #332C46;
+    --shadow-1: 0 2px 8px rgba(0,0,0,.4);
+    --shadow-2: 0 8px 24px rgba(0,0,0,.45);
+    --shadow-3: 0 18px 48px rgba(0,0,0,.6);
+  }
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { scroll-behavior: smooth; scroll-padding-top: 76px; -webkit-text-size-adjust: 100%; }
+
+body {
+  font-family: var(--font);
+  background: var(--paper);
+  color: var(--ink);
+  line-height: 1.75;
+  word-break: keep-all;          /* 한글 음절 고아 줄바꿈 방지 */
+  line-break: strict;
+  overflow-x: hidden;            /* 가로 스크롤 금지 */
+  -webkit-font-smoothing: antialiased;
+}
+
+/* height:auto가 없으면 HTML의 height 속성이 그대로 먹어 표지가 세로로 늘어난다.
+   aspect-ratio를 쓰는 썸네일은 auto에서 비율대로 높이를 계산하므로 함께 안전하다. */
+img { max-width: 100%; height: auto; display: block; }
+a { color: var(--key-ink); }
+
+.wrap { width: 100%; max-width: var(--maxw); margin: 0 auto; padding: 0 var(--gutter); }
+
+:where(a, button, input, summary):focus-visible {
+  outline: 3px solid var(--key);
+  outline-offset: 3px;
+  border-radius: 6px;
+}
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+  overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+
+/* 건너뛰기 링크 — 키보드 사용자가 갤러리 85장을 지나치지 않게 */
+.skip {
+  position: absolute; left: -9999px; top: 0; z-index: 200;
+  background: var(--key); color: #fff; padding: 10px 18px; border-radius: 0 0 10px 0;
+  font-weight: 700; text-decoration: none;
+}
+.skip:focus { left: 0; }
+
+/* ============================================================
+   1. 상단 바
+   ============================================================ */
+
+.topbar {
+  position: sticky; top: 0; z-index: 60;
+  background: color-mix(in srgb, var(--paper) 88%, transparent);
+  backdrop-filter: saturate(180%) blur(12px);
+  -webkit-backdrop-filter: saturate(180%) blur(12px);
+  border-bottom: 1px solid var(--rule);
+}
+.topbar .wrap {
+  display: flex; align-items: center; gap: 14px;
+  height: 58px;
+}
+.topbar-title {
+  font-weight: 800; font-size: 15px; letter-spacing: -.02em;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  flex: 0 1 auto; min-width: 0;
+}
+.topbar-nav { margin-left: auto; display: flex; align-items: center; gap: 4px; }
+.topbar-nav a {
+  font-size: 14px; font-weight: 600; color: var(--ink-2); text-decoration: none;
+  padding: 7px 11px; border-radius: 9px; white-space: nowrap;
+}
+.topbar-nav a:hover { background: var(--surface-2); color: var(--ink); }
+@media (max-width: 720px) { .topbar-nav a.opt { display: none; } }
+
+.qr-btn {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: var(--key); color: #fff; border: 0; cursor: pointer;
+  font-family: inherit; font-size: 14px; font-weight: 700;
+  padding: 9px 15px; border-radius: 10px; white-space: nowrap;
+}
+.qr-btn:hover { background: var(--key-deep); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .qr-btn { color: #17122A; }
+}
+.qr-btn svg { width: 16px; height: 16px; fill: currentColor; flex: none; }
+
+/* ============================================================
+   2. 히어로 — 라벤더 필드 + QR 카드
+   ============================================================ */
+
+.hero {
+  position: relative; overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 88% 5%, color-mix(in srgb, var(--lav) 70%, transparent), transparent 62%),
+    linear-gradient(168deg, var(--lav) 0%, var(--lav-soft) 62%, var(--paper) 100%);
+  padding: clamp(40px, 7vw, 76px) 0 clamp(36px, 6vw, 64px);
+  border-bottom: 1px solid var(--rule);
+}
+.hero-grid {
+  display: grid; grid-template-columns: minmax(0,1.45fr) minmax(0,.9fr);
+  gap: clamp(28px, 4vw, 52px); align-items: start;
+}
+@media (max-width: 880px) { .hero-grid { grid-template-columns: 1fr; } }
+
+.eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--surface); color: var(--key);
+  border: 1px solid color-mix(in srgb, var(--key) 30%, transparent);
+  font-size: 13px; font-weight: 800; letter-spacing: .01em;
+  padding: 6px 13px; border-radius: 99px; margin-bottom: 18px;
+}
+.eyebrow .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--magenta); flex: none; }
+
+h1.hero-title {
+  font-size: clamp(30px, 6.4vw, 54px);
+  font-weight: 800; letter-spacing: -.038em; line-height: 1.16; color: var(--ink);
+}
+.hero-accent {
+  display: block; margin-top: 6px;
+  font-size: clamp(20px, 4.2vw, 33px); font-weight: 800;
+  letter-spacing: -.03em; color: var(--key);
+}
+.hero-summary {
+  margin-top: 20px; max-width: 46ch;
+  font-size: clamp(15px, 1.7vw, 17px); color: var(--ink-2);
+}
+
+.hero-meta { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 24px; }
+.chip {
+  display: inline-flex; align-items: center; gap: 7px;
+  background: color-mix(in srgb, var(--surface) 82%, transparent);
+  border: 1px solid var(--rule); color: var(--ink-2);
+  font-size: 13.5px; font-weight: 600; padding: 7px 13px; border-radius: 99px;
+}
+.chip b { color: var(--ink); font-weight: 700; }
+
+.hero-note {
+  margin-top: 26px; padding: 14px 18px;
+  background: color-mix(in srgb, var(--surface) 75%, transparent);
+  border-left: 4px solid var(--magenta); border-radius: 0 10px 10px 0;
+  font-size: 14.5px; color: var(--ink-2);
+}
+
+/* QR 카드 */
+.qr-card {
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 20px;
+  box-shadow: var(--shadow-2); padding: 22px; text-align: center;
+  max-width: 340px; width: 100%; justify-self: end;
+}
+@media (max-width: 880px) { .qr-card { justify-self: center; } }
+.qr-card h2 {
+  font-size: 15px; font-weight: 800; color: var(--ink); letter-spacing: -.01em;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.qr-card h2 .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--magenta); }
+.qr-card p.qr-hint { font-size: 13.5px; color: var(--ink-3); margin-top: 4px; line-height: 1.55; }
+
+.qr-holder {
+  margin: 16px auto 14px; width: min(212px, 62vw); aspect-ratio: 1;
+  background: #fff; border-radius: 14px; padding: 10px;
+  border: 1px solid var(--rule);
+  display: flex; align-items: center; justify-content: center;
+}
+.qr-holder svg { width: 100%; height: 100%; display: block; }
+.qr-holder.is-empty { color: var(--ink-3); font-size: 13px; padding: 18px; line-height: 1.6; }
+
+.qr-url {
+  font-size: 12.5px; color: var(--ink-3); word-break: break-all; line-height: 1.5;
+  background: var(--surface-2); border-radius: 8px; padding: 8px 10px; margin-bottom: 12px;
+}
+.qr-actions { display: flex; gap: 8px; }
+.qr-actions button {
+  flex: 1; font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer;
+  padding: 10px 8px; border-radius: 10px;
+  border: 1px solid var(--rule); background: var(--surface-2); color: var(--ink-2);
+}
+.qr-actions button:hover { background: var(--lav-soft); color: var(--key); border-color: var(--key); }
+
+.qr-setup { margin-top: 12px; }
+.qr-setup summary {
+  cursor: pointer; font-size: 12.5px; color: var(--ink-3); font-weight: 600;
+  list-style: none; padding: 4px;
+}
+.qr-setup summary::-webkit-details-marker { display: none; }
+.qr-setup summary::before { content: "⚙ "; }
+.qr-setup input {
+  width: 100%; margin-top: 8px; font-family: inherit; font-size: 13px;
+  padding: 9px 11px; border-radius: 9px; border: 1px solid var(--rule);
+  background: var(--surface); color: var(--ink);
+}
+
+/* ============================================================
+   3. 섹션 공통
+   ============================================================ */
+
+section.band { padding: clamp(46px, 7vw, 78px) 0; }
+section.band.alt { background: var(--surface-2); border-block: 1px solid var(--rule); }
+
+.sec-head { margin-bottom: clamp(26px, 3.6vw, 40px); max-width: 60ch; }
+.sec-label {
+  font-size: 13px; font-weight: 800; letter-spacing: .05em; color: var(--magenta);
+  text-transform: uppercase; margin-bottom: 8px;
+}
+.sec-head h2 {
+  font-size: clamp(23px, 3.6vw, 33px); font-weight: 800;
+  letter-spacing: -.032em; line-height: 1.28; color: var(--ink);
+}
+.sec-head p { margin-top: 12px; color: var(--ink-2); font-size: clamp(14.5px, 1.6vw, 16.5px); }
+
+/* ============================================================
+   4. 오늘의 여정
+   ============================================================ */
+
+.journey { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); }
+.jcard {
+  position: relative; overflow: hidden;             /* 고스트 넘버 bleed 필수 */
+  background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius);
+  padding: 22px 20px 20px; text-decoration: none; color: inherit;
+  display: flex; flex-direction: column; min-height: 176px;
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.jcard:hover { transform: translateY(-3px); box-shadow: var(--shadow-2); border-color: var(--pc, var(--key)); }
+.jcard .ghost {
+  position: absolute; right: -10px; bottom: -26px; z-index: 0;
+  font-size: 104px; font-weight: 800; line-height: 1; letter-spacing: -.06em;
+  color: var(--pc, var(--key)); opacity: .09; pointer-events: none;
+}
+.jcard > * { position: relative; z-index: 1; }
+.jcard .jlabel {
+  font-size: 12.5px; font-weight: 800; letter-spacing: .04em;
+  color: var(--pc, var(--key)); margin-bottom: 9px;
+}
+.jcard h3 { font-size: 17.5px; font-weight: 800; letter-spacing: -.028em; line-height: 1.38; }
+.jcard p { margin-top: 9px; font-size: 14px; color: var(--ink-2); line-height: 1.62; }
+.jcard .jfoot {
+  margin-top: auto; padding-top: 14px; font-size: 13px; font-weight: 700;
+  color: var(--pc, var(--key)); display: flex; align-items: center; gap: 6px;
+}
+
+/* ============================================================
+   5. 슬라이드 갤러리
+   ============================================================ */
+
+.tabs {
+  position: sticky; top: 58px; z-index: 40;
+  display: flex; gap: 7px; overflow-x: auto; padding: 12px 0;
+  margin-bottom: 20px; background: var(--paper);
+  scrollbar-width: none; -ms-overflow-style: none;
+}
+section.band.alt .tabs { background: var(--surface-2); }
+.tabs::-webkit-scrollbar { display: none; }
+.tab {
+  flex: none; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+  padding: 9px 15px; border-radius: 99px; white-space: nowrap;
+  border: 1px solid var(--rule); background: var(--surface); color: var(--ink-2);
+}
+.tab:hover { border-color: var(--key); color: var(--key); }
+.tab[aria-selected="true"] { background: var(--key); border-color: var(--key); color: #fff; }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .tab[aria-selected="true"] { color: #17122A; }
+}
+
+.grid {
+  display: grid; gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+@media (max-width: 620px) { .grid { gap: 11px; grid-template-columns: repeat(2, 1fr); } }
+
+.thumb {
+  border: 0; padding: 0; background: none; font-family: inherit; cursor: pointer;
+  text-align: left; display: flex; flex-direction: column; gap: 9px;
+}
+.thumb img {
+  width: 100%; aspect-ratio: 16/9; object-fit: cover;
+  border-radius: 11px; border: 1px solid var(--rule);
+  background: var(--surface-2);
+  transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.thumb:hover img { transform: translateY(-3px); box-shadow: var(--shadow-2); border-color: var(--key); }
+.thumb figcaption { display: flex; gap: 8px; align-items: flex-start; padding: 0 2px; }
+.thumb .num {
+  flex: none; font-size: 11.5px; font-weight: 800; color: #fff;
+  background: var(--pc, var(--key)); border-radius: 5px;
+  padding: 2px 6px; margin-top: 2px; min-width: 26px; text-align: center;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .thumb .num { color: #17122A; }
+}
+.thumb .cap {
+  font-size: 13px; line-height: 1.5; color: var(--ink-2); font-weight: 600;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+@media (max-width: 620px) { .thumb .cap { font-size: 12px; } }
+
+.gallery-empty { color: var(--ink-3); padding: 30px 0; }
+
+/* ============================================================
+   6. 라이트박스
+   ============================================================ */
+
+.lb {
+  position: fixed; inset: 0; z-index: 100; display: none;
+  background: rgba(14,10,22,.93);
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+.lb[open], .lb.is-open { display: grid; grid-template-rows: auto 1fr auto; }
+.lb-top { display: flex; align-items: center; gap: 12px; padding: 12px 16px; color: #fff; }
+.lb-count { font-size: 14px; font-weight: 800; letter-spacing: .02em; }
+.lb-title {
+  font-size: 14px; color: rgba(255,255,255,.72); font-weight: 600;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; min-width: 0;
+}
+.lb-close {
+  margin-left: auto; flex: none; background: rgba(255,255,255,.13); border: 0; color: #fff;
+  width: 38px; height: 38px; border-radius: 10px; font-size: 20px; cursor: pointer; line-height: 1;
+}
+.lb-close:hover { background: rgba(255,255,255,.26); }
+.lb-stage {
+  position: relative; display: flex; align-items: center; justify-content: center;
+  padding: 0 8px; min-height: 0;
+}
+.lb-stage img {
+  max-width: 100%; max-height: 100%; width: auto; height: auto;
+  object-fit: contain; border-radius: 8px; background: #fff;
+}
+.lb-nav {
+  position: absolute; top: 50%; transform: translateY(-50%);
+  width: 46px; height: 46px; border-radius: 50%; border: 0; cursor: pointer;
+  background: rgba(255,255,255,.14); color: #fff; font-size: 22px; line-height: 1;
+}
+.lb-nav:hover { background: rgba(255,255,255,.3); }
+.lb-nav[disabled] { opacity: .25; cursor: default; }
+.lb-prev { left: 10px; }
+.lb-next { right: 10px; }
+.lb-foot {
+  display: flex; gap: 10px; justify-content: center; flex-wrap: wrap;
+  padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+}
+.lb-foot a, .lb-foot button {
+  font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer;
+  text-decoration: none; padding: 9px 16px; border-radius: 10px;
+  background: rgba(255,255,255,.14); color: #fff; border: 0;
+}
+.lb-foot a:hover, .lb-foot button:hover { background: rgba(255,255,255,.28); }
+@media (max-width: 620px) { .lb-nav { width: 40px; height: 40px; } }
+
+/* QR 전체화면 (프로젝터용) */
+.qr-full {
+  position: fixed; inset: 0; z-index: 120; display: none;
+  background: var(--surface); place-items: center; padding: 28px; text-align: center;
+}
+.qr-full.is-open { display: grid; }
+.qr-full .inner { max-width: 660px; }
+.qr-full h2 { font-size: clamp(22px, 4vw, 38px); font-weight: 800; letter-spacing: -.03em; }
+.qr-full p { margin-top: 10px; color: var(--ink-2); font-size: clamp(14px, 2vw, 18px); }
+.qr-full .big {
+  margin: clamp(20px, 3vw, 32px) auto; width: min(58vh, 74vw, 430px); aspect-ratio: 1;
+  background: #fff; padding: 16px; border-radius: 20px; border: 1px solid var(--rule);
+}
+.qr-full .big svg { width: 100%; height: 100%; }
+.qr-full .u { font-size: clamp(13px, 1.8vw, 17px); color: var(--ink-3); word-break: break-all; }
+.qr-full .close {
+  margin-top: 24px; font-family: inherit; font-size: 14px; font-weight: 700; cursor: pointer;
+  padding: 11px 24px; border-radius: 11px; border: 1px solid var(--rule);
+  background: var(--surface-2); color: var(--ink-2);
+}
+
+/* ============================================================
+   7. 자료 받기
+   ============================================================ */
+
+.dl-list { display: grid; gap: 10px; }
+.dl {
+  display: flex; align-items: center; gap: 14px; text-decoration: none; color: inherit;
+  background: var(--surface); border: 1px solid var(--rule); border-radius: 13px;
+  padding: 15px 18px; transition: border-color .16s ease, transform .16s ease;
+}
+.dl:hover { border-color: var(--key); transform: translateX(3px); }
+.dl .ic {
+  flex: none; width: 40px; height: 40px; border-radius: 10px;
+  background: var(--lav-soft); color: var(--key);
+  display: grid; place-items: center; font-size: 12px; font-weight: 800; letter-spacing: -.02em;
+}
+.dl .t { flex: 1; min-width: 0; }
+.dl .t b { display: block; font-size: 15.5px; font-weight: 700; letter-spacing: -.02em; }
+.dl .t span { font-size: 13px; color: var(--ink-3); }
+.dl .sz { flex: none; font-size: 13px; font-weight: 700; color: var(--ink-3); }
+
+/* ============================================================
+   8. 책 소개
+   ============================================================ */
+
+.book {
+  display: grid; grid-template-columns: minmax(0, 250px) minmax(0, 1fr);
+  gap: clamp(24px, 4vw, 48px); align-items: start;
+}
+@media (max-width: 760px) { .book { grid-template-columns: 1fr; justify-items: center; text-align: center; } }
+
+.book-cover {
+  border-radius: 6px; box-shadow: var(--shadow-3); width: 100%; max-width: 250px;
+  border: 1px solid var(--rule);
+}
+.book-body h3 {
+  font-size: clamp(20px, 3vw, 27px); font-weight: 800; letter-spacing: -.032em; line-height: 1.35;
+}
+.book-body .by { margin-top: 10px; font-size: 15px; color: var(--ink-2); font-weight: 600; }
+.book-body .bib { margin-top: 6px; font-size: 14px; color: var(--ink-3); }
+.book-body .blurb { margin-top: 18px; font-size: 15.5px; color: var(--ink-2); max-width: 54ch; }
+@media (max-width: 760px) { .book-body .blurb { margin-inline: auto; } }
+
+.book-points { margin-top: 18px; display: grid; gap: 8px; list-style: none; }
+.book-points li {
+  font-size: 14.5px; color: var(--ink-2); padding-left: 25px; position: relative; text-align: left;
+}
+.book-points li::before {
+  content: ""; position: absolute; left: 4px; top: .62em;
+  width: 8px; height: 8px; border-radius: 2px; background: var(--highlight);
+  box-shadow: inset 0 0 0 1px rgba(35,24,21,.12);
+}
+
+.buy { margin-top: 24px; display: flex; flex-wrap: wrap; gap: 9px; }
+@media (max-width: 760px) { .buy { justify-content: center; } }
+.buy a {
+  font-size: 14px; font-weight: 700; text-decoration: none;
+  padding: 11px 19px; border-radius: 11px;
+  background: var(--surface); border: 1px solid var(--rule); color: var(--ink-2);
+}
+.buy a:hover { border-color: var(--key); color: var(--key); }
+.buy a.primary { background: var(--key); border-color: var(--key); color: #fff; }
+.buy a.primary:hover { background: var(--key-deep); }
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) .buy a.primary { color: #17122A; }
+}
+
+/* ============================================================
+   9. 푸터
+   ============================================================ */
+
+footer.foot {
+  background: var(--ink); color: rgba(255,255,255,.72);
+  padding: clamp(36px, 5vw, 56px) 0 clamp(30px, 4vw, 44px); font-size: 14px;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) footer.foot { background: #0C0914; }
+}
+footer.foot .frow {
+  display: flex; flex-wrap: wrap; gap: 18px 32px; justify-content: space-between; align-items: flex-start;
+}
+footer.foot b { color: #fff; font-weight: 800; font-size: 15px; display: block; margin-bottom: 6px; }
+footer.foot a { color: rgba(255,255,255,.9); }
+footer.foot .fine {
+  margin-top: 26px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,.14);
+  font-size: 12.5px; color: rgba(255,255,255,.5); line-height: 1.7;
+}
+.print-btn {
+  font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer;
+  padding: 10px 18px; border-radius: 10px;
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.22); color: #fff;
+}
+.print-btn:hover { background: rgba(255,255,255,.22); }
+
+/* ============================================================
+   10. 인쇄 — 메뉴·버튼·애니메이션을 걷어내고 A4로
+   ============================================================ */
+
+@media print {
+  @page { size: A4; margin: 14mm; }
+  html { scroll-padding-top: 0; }
+  body { background: #fff; color: #000; font-size: 10.5pt; line-height: 1.6; }
+  .topbar, .tabs, .qr-actions, .qr-setup, .lb, .qr-full, .print-btn, .skip { display: none !important; }
+  .hero { background: #fff !important; border-bottom: 1px solid #ccc; padding: 0 0 12mm; }
+  section.band { padding: 8mm 0; break-inside: auto; }
+  section.band.alt { background: #fff; border: 0; }
+  .jcard, .dl, .thumb, .book { break-inside: avoid; }
+  .jcard:hover { transform: none; box-shadow: none; }
+  .grid { grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+  .thumb img { border: 1px solid #ddd; }
+  footer.foot { background: #fff; color: #444; border-top: 1px solid #ccc; }
+  footer.foot b, footer.foot a { color: #000; }
+  a { text-decoration: none; }
+  .qr-card { box-shadow: none; page-break-inside: avoid; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: .001ms !important; transition-duration: .001ms !important;
+  }
+  .jcard:hover, .thumb:hover img, .dl:hover { transform: none; }
+}
+</style>
+</head>
+<body>
+
+<a class="skip" href="#downloads">자료 받기로 건너뛰기</a>
+
+<header class="topbar">
+  <div class="wrap">
+    <span class="topbar-title">웹앱 만들기 with 바이브 코딩</span>
+    <nav class="topbar-nav" aria-label="바로가기">
+        <a href="#journey">오늘의 여정</a>
+        <a href="#slides">슬라이드</a>
+        <a href="#downloads" class="opt">자료 받기</a>
+        <a href="#book" class="opt">책</a>
+        <button class="qr-btn" data-qr-open type="button">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 3h8v8H3V3zm2 2v4h4V5H5zm8-2h8v8h-8V3zm2 2v4h4V5h-4zM3 13h8v8H3v-8zm2 2v4h4v-4H5zm8-2h3v3h-3v-3zm5 0h3v3h-3v-3zm-5 5h3v3h-3v-3zm5 0h3v3h-3v-3z"/></svg>
+          QR 띄우기
+        </button>
+    </nav>
+  </div>
+</header>
+
+<main>
+<section class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow"><span class="dot"></span>강의 자료 · PART 1-4 + 부록</span>
+      <h1 class="hero-title">요즘 교사를 위한 웹앱 만들기<span class="hero-accent">with 바이브 코딩</span></h1>
+      <p class="hero-summary">오늘 함께 볼 것은 코딩 문법이 아니라, 교실의 불편 하나를 실제로 돌아가는 웹 서비스로 바꾸는 전체 경로입니다. 여덟 개 장을 네 개의 파트로 나눠 갑니다.</p>
+      <div class="hero-meta">
+          <span class="chip">구성 <b>슬라이드 85장 · Part 1-4 + 부록</b></span>
+        </div>
+      <p class="hero-note">슬라이드는 강의 화면과 같은 것입니다. 놓친 장면은 여기서 다시 보고, 필요한 파트는 PDF로 받아 가세요. 강의가 끝난 뒤에도 주소는 그대로입니다.</p>
+    </div>
+
+    <aside class="qr-card">
+      <h2><span class="dot"></span>폰으로 함께 보기</h2>
+      <p class="qr-hint">카메라를 QR에 비추면 이 페이지가 열립니다. 앱을 깔 필요는 없습니다.</p>
+      <div class="qr-holder" id="qrHolder"></div>
+      <div class="qr-url" id="qrUrl"></div>
+      <div class="qr-actions">
+        <button type="button" id="qrCopy">주소 복사</button>
+        <button type="button" data-qr-open>크게 보기</button>
+      </div>
+      <details class="qr-setup">
+        <summary>배포 주소 직접 넣기</summary>
+        <input type="url" id="qrInput" placeholder="https://example.github.io/lecture/"
+               aria-label="QR에 넣을 배포 주소" inputmode="url" autocomplete="off">
+      </details>
+    </aside>
+  </div>
+</section>
+<section class="band" id="journey">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="sec-label">오늘의 여정</p>
+      <h2>앱에 기관을 하나씩 달아 갑니다</h2>
+      <p>화면을 만들고(Part 1), 바깥의 지식을 끌어오고(Part 2), 기억을 심고(Part 3), 마지막에 내 컴퓨터를 작업실로 만듭니다(Part 4). 카드를 누르면 그 파트의 슬라이드로 갑니다.</p>
+    </div>
+    <div class="journey">
+    <a class="jcard" href="#slides" data-jump="intro" style="--pc:#E85297">
+      <span class="ghost" aria-hidden="true">0</span>
+      <span class="jlabel">도입</span>
+      <h3>&quot;이게 왜 이렇게 불편하지?&quot;</h3>
+      <p>이 한 줄에서 모든 서비스가 시작됐습니다. 오늘 갈 길을 먼저 펼쳐 봅니다.</p>
+      <span class="jfoot">슬라이드 3장 · 1–3 →</span>
+    </a>
+    <a class="jcard" href="#slides" data-jump="part1" style="--pc:#6356A2">
+      <span class="ghost" aria-hidden="true">01</span>
+      <span class="jlabel">PART 01</span>
+      <h3>아이디어를 서비스로 전환하는 첫걸음</h3>
+      <p>한숨을 문제로 바꾸고, PRD 한 장을 거쳐, 코드 한 줄 치지 않고 작동하는 화면까지.</p>
+      <span class="jfoot">슬라이드 19장 · 4–22 →</span>
+    </a>
+    <a class="jcard" href="#slides" data-jump="part2" style="--pc:#3688C9">
+      <span class="ghost" aria-hidden="true">02</span>
+      <span class="jlabel">PART 02</span>
+      <h3>앱에 지식을 더하다</h3>
+      <p>우리가 만든 앱은 아직 고립된 섬입니다. API로 바깥 세계와 연결해 눈과 귀를 답니다.</p>
+      <span class="jfoot">슬라이드 20장 · 23–42 →</span>
+    </a>
+    <a class="jcard" href="#slides" data-jump="part3" style="--pc:#4A3E8F">
+      <span class="ghost" aria-hidden="true">03</span>
+      <span class="jlabel">PART 03</span>
+      <h3>앱에 클라우드 기능을 심다</h3>
+      <p>새로고침 한 번에 사라지는 앱은 아직 서비스가 아닙니다. 데이터베이스로 기억을 심습니다.</p>
+      <span class="jfoot">슬라이드 13장 · 43–55 →</span>
+    </a>
+    <a class="jcard" href="#slides" data-jump="part4" style="--pc:#6356A2">
+      <span class="ghost" aria-hidden="true">04</span>
+      <span class="jlabel">PART 04</span>
+      <h3>로컬 환경에서 진짜 개발자처럼 일하기</h3>
+      <p>편리한 공유 오피스에는 내 이름표가 없습니다. IDE와 깃, 그리고 배포까지 내 손으로.</p>
+      <span class="jfoot">슬라이드 20장 · 56–75 →</span>
+    </a>
+    <a class="jcard" href="#slides" data-jump="appendix" style="--pc:#E85297">
+      <span class="ghost" aria-hidden="true">A</span>
+      <span class="jlabel">부록</span>
+      <h3>그 밖의 인공지능 도구들</h3>
+      <p>도구는 계속 바뀝니다. 그래서 부록은 Cursor와 Claude Code의 소개와 설치만 다룹니다.</p>
+      <span class="jfoot">슬라이드 8장 · 76–83 →</span>
+    </a>
+    <a class="jcard" href="#slides" data-jump="closing" style="--pc:#231815">
+      <span class="ghost" aria-hidden="true">·</span>
+      <span class="jlabel">클로징</span>
+      <h3>실력은 손이 아니라 입에서 나온다</h3>
+      <p>내일 아침, 가장 자주 나오는 한숨 하나를 받아 적는 것에서 다시 시작합니다.</p>
+      <span class="jfoot">슬라이드 2장 · 84–85 →</span>
+    </a>
+    </div>
+  </div>
+</section>
+<section class="band alt" id="slides">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="sec-label">슬라이드</p>
+      <h2>강의 슬라이드 85장</h2>
+      <p>썸네일을 누르면 크게 봅니다. 크게 본 상태에서 좌우로 밀거나 화살표 키로 넘길 수 있습니다.</p>
+    </div>
+    <div class="tabs" role="tablist" aria-label="파트 고르기">
+      <button class="tab" type="button" data-part="all" aria-selected="true">전체 85장</button>
+      <button class="tab" type="button" data-part="intro" aria-selected="false">도입</button>
+      <button class="tab" type="button" data-part="part1" aria-selected="false">PART 01</button>
+      <button class="tab" type="button" data-part="part2" aria-selected="false">PART 02</button>
+      <button class="tab" type="button" data-part="part3" aria-selected="false">PART 03</button>
+      <button class="tab" type="button" data-part="part4" aria-selected="false">PART 04</button>
+      <button class="tab" type="button" data-part="appendix" aria-selected="false">부록</button>
+      <button class="tab" type="button" data-part="closing" aria-selected="false">클로징</button>
+    </div>
+    <div class="grid" id="grid">
+      <figure class="thumb" data-part="intro" data-index="0"
+               role="button" tabindex="0" style="--pc:#E85297"
+               aria-label="슬라이드 1 요즘 교사를 위한 웹앱 만들기 with 바이브 코딩 크게 보기">
+        <img src="assets/thumbs/s1.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 1 — 요즘 교사를 위한 웹앱 만들기 with 바이브 코딩">
+        <figcaption><span class="num">1</span><span class="cap">요즘 교사를 위한 웹앱 만들기 with 바이브 코딩</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="intro" data-index="1"
+               role="button" tabindex="0" style="--pc:#E85297"
+               aria-label="슬라이드 2 &quot;이게 왜 이렇게 불편하지?&quot; — 이 한 줄에서 모든 서비스가 시작됐다 크게 보기">
+        <img src="assets/thumbs/s2.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 2 — &quot;이게 왜 이렇게 불편하지?&quot; — 이 한 줄에서 모든 서비스가 시작됐다">
+        <figcaption><span class="num">2</span><span class="cap">&quot;이게 왜 이렇게 불편하지?&quot; — 이 한 줄에서 모든 서비스가 시작됐다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="intro" data-index="2"
+               role="button" tabindex="0" style="--pc:#E85297"
+               aria-label="슬라이드 3 오늘 우리는 앱에 기관을 하나씩 달아 갑니다 크게 보기">
+        <img src="assets/thumbs/s3.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 3 — 오늘 우리는 앱에 기관을 하나씩 달아 갑니다">
+        <figcaption><span class="num">3</span><span class="cap">오늘 우리는 앱에 기관을 하나씩 달아 갑니다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="3"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 4 Part 01 아이디어를 서비스로 전환하는 첫걸음 크게 보기">
+        <img src="assets/thumbs/s4.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 4 — Part 01 아이디어를 서비스로 전환하는 첫걸음">
+        <figcaption><span class="num">4</span><span class="cap">Part 01 아이디어를 서비스로 전환하는 첫걸음</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="4"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 5 200명의 서술형 답안지는 16시간짜리 노동이다 크게 보기">
+        <img src="assets/thumbs/s5.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 5 — 200명의 서술형 답안지는 16시간짜리 노동이다">
+        <figcaption><span class="num">5</span><span class="cap">200명의 서술형 답안지는 16시간짜리 노동이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="5"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 6 기술은 발전했는데 평가만 과거에 머물러 있다 크게 보기">
+        <img src="assets/thumbs/s6.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 6 — 기술은 발전했는데 평가만 과거에 머물러 있다">
+        <figcaption><span class="num">6</span><span class="cap">기술은 발전했는데 평가만 과거에 머물러 있다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="6"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 7 체념을 정의로 바꾸면, 불편함은 입력·판단·출력 세 문제가 된다 크게 보기">
+        <img src="assets/thumbs/s7.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 7 — 체념을 정의로 바꾸면, 불편함은 입력·판단·출력 세 문제가 된다">
+        <figcaption><span class="num">7</span><span class="cap">체념을 정의로 바꾸면, 불편함은 입력·판단·출력 세 문제가 된다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="7"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 8 한숨이 앱의 이름이고, 한숨의 이유가 핵심 기능이다 크게 보기">
+        <img src="assets/thumbs/s8.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 8 — 한숨이 앱의 이름이고, 한숨의 이유가 핵심 기능이다">
+        <figcaption><span class="num">8</span><span class="cap">한숨이 앱의 이름이고, 한숨의 이유가 핵심 기능이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="8"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 9 좋은 문제는 만능이 아니라 칼날처럼 구체적이다 크게 보기">
+        <img src="assets/thumbs/s9.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 9 — 좋은 문제는 만능이 아니라 칼날처럼 구체적이다">
+        <figcaption><span class="num">9</span><span class="cap">좋은 문제는 만능이 아니라 칼날처럼 구체적이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="9"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 10 &quot;나는 [사용자]로서, [목표]를 위해, [기능]이 필요하다&quot; 크게 보기">
+        <img src="assets/thumbs/s10.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 10 — &quot;나는 [사용자]로서, [목표]를 위해, [기능]이 필요하다&quot;">
+        <figcaption><span class="num">10</span><span class="cap">&quot;나는 [사용자]로서, [목표]를 위해, [기능]이 필요하다&quot;</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="10"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 11 MVP는 아이언맨 슈트가 아니라 바퀴 달린 의자다 크게 보기">
+        <img src="assets/thumbs/s11.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 11 — MVP는 아이언맨 슈트가 아니라 바퀴 달린 의자다">
+        <figcaption><span class="num">11</span><span class="cap">MVP는 아이언맨 슈트가 아니라 바퀴 달린 의자다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="11"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 12 PRD 한 장이 고민의 80%를 미리 없앤다 크게 보기">
+        <img src="assets/thumbs/s12.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 12 — PRD 한 장이 고민의 80%를 미리 없앤다">
+        <figcaption><span class="num">12</span><span class="cap">PRD 한 장이 고민의 80%를 미리 없앤다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="12"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 13 복사 → 메모장 → .html로 저장 → 더블클릭, 네 번이면 앱이 태어난다 크게 보기">
+        <img src="assets/thumbs/s13.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 13 — 복사 → 메모장 → .html로 저장 → 더블클릭, 네 번이면 앱이 태어난다">
+        <figcaption><span class="num">13</span><span class="cap">복사 → 메모장 → .html로 저장 → 더블클릭, 네 번이면 앱이 태어난다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="13"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 14 코드 한 줄 치지 않았는데 작동하는 도구가 생겼다 크게 보기">
+        <img src="assets/thumbs/s14.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 14 — 코드 한 줄 치지 않았는데 작동하는 도구가 생겼다">
+        <figcaption><span class="num">14</span><span class="cap">코드 한 줄 치지 않았는데 작동하는 도구가 생겼다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="14"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 15 HTML은 설계도, CSS는 인테리어, JavaScript는 점원이다 크게 보기">
+        <img src="assets/thumbs/s15.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 15 — HTML은 설계도, CSS는 인테리어, JavaScript는 점원이다">
+        <figcaption><span class="num">15</span><span class="cap">HTML은 설계도, CSS는 인테리어, JavaScript는 점원이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="15"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 16 로컬 스토리지는 그 기기 안에서만 열리는 작은 창고다 크게 보기">
+        <img src="assets/thumbs/s16.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 16 — 로컬 스토리지는 그 기기 안에서만 열리는 작은 창고다">
+        <figcaption><span class="num">16</span><span class="cap">로컬 스토리지는 그 기기 안에서만 열리는 작은 창고다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="16"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 17 내 컴퓨터에서만 열리는 파일은 아직 서비스가 아니다 크게 보기">
+        <img src="assets/thumbs/s17.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 17 — 내 컴퓨터에서만 열리는 파일은 아직 서비스가 아니다">
+        <figcaption><span class="num">17</span><span class="cap">내 컴퓨터에서만 열리는 파일은 아직 서비스가 아니다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="17"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 18 Lovable은 대화로 주문받는 풀스택 앱 빌더다 크게 보기">
+        <img src="assets/thumbs/s18.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 18 — Lovable은 대화로 주문받는 풀스택 앱 빌더다">
+        <figcaption><span class="num">18</span><span class="cap">Lovable은 대화로 주문받는 풀스택 앱 빌더다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="18"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 19 화면만 주문하지 말고, 데이터 구조까지 함께 주문하라 크게 보기">
+        <img src="assets/thumbs/s19.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 19 — 화면만 주문하지 말고, 데이터 구조까지 함께 주문하라">
+        <figcaption><span class="num">19</span><span class="cap">화면만 주문하지 말고, 데이터 구조까지 함께 주문하라</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="19"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 20 Publish 버튼 하나가 내 파일을 개업한 가게로 바꾼다 크게 보기">
+        <img src="assets/thumbs/s20.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 20 — Publish 버튼 하나가 내 파일을 개업한 가게로 바꾼다">
+        <figcaption><span class="num">20</span><span class="cap">Publish 버튼 하나가 내 파일을 개업한 가게로 바꾼다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="20"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 21 웹앱은 홀·주방·냉장고·주문서로 이루어진 식당이다 크게 보기">
+        <img src="assets/thumbs/s21.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 21 — 웹앱은 홀·주방·냉장고·주문서로 이루어진 식당이다">
+        <figcaption><span class="num">21</span><span class="cap">웹앱은 홀·주방·냉장고·주문서로 이루어진 식당이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part1" data-index="21"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 22 여기까지 답할 수 있습니까 — PART 01 크게 보기">
+        <img src="assets/thumbs/s22.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 22 — 여기까지 답할 수 있습니까 — PART 01">
+        <figcaption><span class="num">22</span><span class="cap">여기까지 답할 수 있습니까 — PART 01</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="22"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 23 Part 02 앱에 지식을 더하다 크게 보기">
+        <img src="assets/thumbs/s23.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 23 — Part 02 앱에 지식을 더하다">
+        <figcaption><span class="num">23</span><span class="cap">Part 02 앱에 지식을 더하다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="23"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 24 우리가 만든 앱은 아직 고립된 섬이다 크게 보기">
+        <img src="assets/thumbs/s24.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 24 — 우리가 만든 앱은 아직 고립된 섬이다">
+        <figcaption><span class="num">24</span><span class="cap">우리가 만든 앱은 아직 고립된 섬이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="24"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 25 API는 사람이 아니라 기계들끼리 쓰는 대화 창구다 크게 보기">
+        <img src="assets/thumbs/s25.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 25 — API는 사람이 아니라 기계들끼리 쓰는 대화 창구다">
+        <figcaption><span class="num">25</span><span class="cap">API는 사람이 아니라 기계들끼리 쓰는 대화 창구다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="25"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 26 서버는 전체를 열지 않고, 허락한 것만 건넨다 크게 보기">
+        <img src="assets/thumbs/s26.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 26 — 서버는 전체를 열지 않고, 허락한 것만 건넨다">
+        <figcaption><span class="num">26</span><span class="cap">서버는 전체를 열지 않고, 허락한 것만 건넨다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="26"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 27 API가 돌려주는 건 표가 아니라 이름표 붙은 텍스트 덩어리다 크게 보기">
+        <img src="assets/thumbs/s27.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 27 — API가 돌려주는 건 표가 아니라 이름표 붙은 텍스트 덩어리다">
+        <figcaption><span class="num">27</span><span class="cap">API가 돌려주는 건 표가 아니라 이름표 붙은 텍스트 덩어리다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="27"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 28 DDISH_NM이 요리명이라는 걸 알면 프롬프트가 달라진다 크게 보기">
+        <img src="assets/thumbs/s28.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 28 — DDISH_NM이 요리명이라는 걸 알면 프롬프트가 달라진다">
+        <figcaption><span class="num">28</span><span class="cap">DDISH_NM이 요리명이라는 걸 알면 프롬프트가 달라진다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="28"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 29 국가가 이미 지어 둔 데이터 생태계를 부품처럼 가져다 쓴다 크게 보기">
+        <img src="assets/thumbs/s29.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 29 — 국가가 이미 지어 둔 데이터 생태계를 부품처럼 가져다 쓴다">
+        <figcaption><span class="num">29</span><span class="cap">국가가 이미 지어 둔 데이터 생태계를 부품처럼 가져다 쓴다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="29"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 30 프론트엔드는 홀, 백엔드는 주방, API는 종업원과 주문서다 크게 보기">
+        <img src="assets/thumbs/s30.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 30 — 프론트엔드는 홀, 백엔드는 주방, API는 종업원과 주문서다">
+        <figcaption><span class="num">30</span><span class="cap">프론트엔드는 홀, 백엔드는 주방, API는 종업원과 주문서다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="30"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 31 인증 키는 서버로 들어가는 디지털 교직원증이다 크게 보기">
+        <img src="assets/thumbs/s31.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 31 — 인증 키는 서버로 들어가는 디지털 교직원증이다">
+        <figcaption><span class="num">31</span><span class="cap">인증 키는 서버로 들어가는 디지털 교직원증이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="31"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 32 프롬프트 한 문단이 급식 조회 앱이 된다 크게 보기">
+        <img src="assets/thumbs/s32.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 32 — 프롬프트 한 문단이 급식 조회 앱이 된다">
+        <figcaption><span class="num">32</span><span class="cap">프롬프트 한 문단이 급식 조회 앱이 된다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="32"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 33 완성이 아니라 개선이 바이브 코딩의 본체다 크게 보기">
+        <img src="assets/thumbs/s33.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 33 — 완성이 아니라 개선이 바이브 코딩의 본체다">
+        <figcaption><span class="num">33</span><span class="cap">완성이 아니라 개선이 바이브 코딩의 본체다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="33"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 34 프롬프트에 세 가지만 넣으면 API 코드는 AI가 쓴다 크게 보기">
+        <img src="assets/thumbs/s34.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 34 — 프롬프트에 세 가지만 넣으면 API 코드는 AI가 쓴다">
+        <figcaption><span class="num">34</span><span class="cap">프롬프트에 세 가지만 넣으면 API 코드는 AI가 쓴다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="34"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 35 글자를 모르는 아이는 챗봇에게 질문할 수 없다 크게 보기">
+        <img src="assets/thumbs/s35.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 35 — 글자를 모르는 아이는 챗봇에게 질문할 수 없다">
+        <figcaption><span class="num">35</span><span class="cap">글자를 모르는 아이는 챗봇에게 질문할 수 없다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="35"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 36 앱에 눈과 두뇌와 입을 하나씩 달아 준다 크게 보기">
+        <img src="assets/thumbs/s36.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 36 — 앱에 눈과 두뇌와 입을 하나씩 달아 준다">
+        <figcaption><span class="num">36</span><span class="cap">앱에 눈과 두뇌와 입을 하나씩 달아 준다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="36"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 37 사물을 비추면 &#39;Mug&#39;가 뜨고 소리가 난다 크게 보기">
+        <img src="assets/thumbs/s37.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 37 — 사물을 비추면 &#39;Mug&#39;가 뜨고 소리가 난다">
+        <figcaption><span class="num">37</span><span class="cap">사물을 비추면 &#39;Mug&#39;가 뜨고 소리가 난다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="37"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 38 지시문 한 줄만 바꾸면 전혀 다른 앱이 된다 크게 보기">
+        <img src="assets/thumbs/s38.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 38 — 지시문 한 줄만 바꾸면 전혀 다른 앱이 된다">
+        <figcaption><span class="num">38</span><span class="cap">지시문 한 줄만 바꾸면 전혀 다른 앱이 된다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="38"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 39 키를 만들려면 프로젝트부터 있어야 한다 크게 보기">
+        <img src="assets/thumbs/s39.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 39 — 키를 만들려면 프로젝트부터 있어야 한다">
+        <figcaption><span class="num">39</span><span class="cap">키를 만들려면 프로젝트부터 있어야 한다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="39"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 40 삐뚤빼뚤한 손글씨도 AI는 읽는다 크게 보기">
+        <img src="assets/thumbs/s40.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 40 — 삐뚤빼뚤한 손글씨도 AI는 읽는다">
+        <figcaption><span class="num">40</span><span class="cap">삐뚤빼뚤한 손글씨도 AI는 읽는다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="40"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 41 시스템 프롬프트는 AI에게 주는 배역 설정서다 크게 보기">
+        <img src="assets/thumbs/s41.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 41 — 시스템 프롬프트는 AI에게 주는 배역 설정서다">
+        <figcaption><span class="num">41</span><span class="cap">시스템 프롬프트는 AI에게 주는 배역 설정서다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part2" data-index="41"
+               role="button" tabindex="0" style="--pc:#3688C9"
+               aria-label="슬라이드 42 프로토타입과 서비스 사이에는 보안·과금·개인정보가 있다 크게 보기">
+        <img src="assets/thumbs/s42.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 42 — 프로토타입과 서비스 사이에는 보안·과금·개인정보가 있다">
+        <figcaption><span class="num">42</span><span class="cap">프로토타입과 서비스 사이에는 보안·과금·개인정보가 있다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="42"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 43 Part 03 앱에 클라우드 기능을 심다 크게 보기">
+        <img src="assets/thumbs/s43.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 43 — Part 03 앱에 클라우드 기능을 심다">
+        <figcaption><span class="num">43</span><span class="cap">Part 03 앱에 클라우드 기능을 심다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="43"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 44 새로고침 한 번에 사라지는 앱은 아직 서비스가 아니다 크게 보기">
+        <img src="assets/thumbs/s44.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 44 — 새로고침 한 번에 사라지는 앱은 아직 서비스가 아니다">
+        <figcaption><span class="num">44</span><span class="cap">새로고침 한 번에 사라지는 앱은 아직 서비스가 아니다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="44"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 45 데이터베이스는 교무실 캐비닛이고, 그 속은 엑셀과 똑같이 생겼다 크게 보기">
+        <img src="assets/thumbs/s45.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 45 — 데이터베이스는 교무실 캐비닛이고, 그 속은 엑셀과 똑같이 생겼다">
+        <figcaption><span class="num">45</span><span class="cap">데이터베이스는 교무실 캐비닛이고, 그 속은 엑셀과 똑같이 생겼다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="45"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 46 복잡해 보여도 데이터베이스는 네 가지 주문만 외운다 크게 보기">
+        <img src="assets/thumbs/s46.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 46 — 복잡해 보여도 데이터베이스는 네 가지 주문만 외운다">
+        <figcaption><span class="num">46</span><span class="cap">복잡해 보여도 데이터베이스는 네 가지 주문만 외운다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="46"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 47 백엔드는 이제 짓는 것이 아니라 빌려 쓰는 것이다 크게 보기">
+        <img src="assets/thumbs/s47.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 47 — 백엔드는 이제 짓는 것이 아니라 빌려 쓰는 것이다">
+        <figcaption><span class="num">47</span><span class="cap">백엔드는 이제 짓는 것이 아니라 빌려 쓰는 것이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="47"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 48 Airtable·Firebase·Supabase, 셋의 차이는 성능이 아니라 용도다 크게 보기">
+        <img src="assets/thumbs/s48.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 48 — Airtable·Firebase·Supabase, 셋의 차이는 성능이 아니라 용도다">
+        <figcaption><span class="num">48</span><span class="cap">Airtable·Firebase·Supabase, 셋의 차이는 성능이 아니라 용도다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="48"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 49 데이터 본부부터 세운다 — 마스터 키와 Seoul을 잊지 말 것 크게 보기">
+        <img src="assets/thumbs/s49.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 49 — 데이터 본부부터 세운다 — 마스터 키와 Seoul을 잊지 말 것">
+        <figcaption><span class="num">49</span><span class="cap">데이터 본부부터 세운다 — 마스터 키와 Seoul을 잊지 말 것</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="49"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 50 프론트엔드가 백엔드로 들어가려면 출입증 두 장이 필요하다 크게 보기">
+        <img src="assets/thumbs/s50.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 50 — 프론트엔드가 백엔드로 들어가려면 출입증 두 장이 필요하다">
+        <figcaption><span class="num">50</span><span class="cap">프론트엔드가 백엔드로 들어가려면 출입증 두 장이 필요하다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="50"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 51 프롬프트 한 장에 화면·테이블·CRUD를 한꺼번에 시킨다 크게 보기">
+        <img src="assets/thumbs/s51.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 51 — 프롬프트 한 장에 화면·테이블·CRUD를 한꺼번에 시킨다">
+        <figcaption><span class="num">51</span><span class="cap">프롬프트 한 장에 화면·테이블·CRUD를 한꺼번에 시킨다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="51"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 52 AI가 써 준 설계도를 붙여넣고 Run — 테이블로 가는 길은 두 갈래다 크게 보기">
+        <img src="assets/thumbs/s52.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 52 — AI가 써 준 설계도를 붙여넣고 Run — 테이블로 가는 길은 두 갈래다">
+        <figcaption><span class="num">52</span><span class="cap">AI가 써 준 설계도를 붙여넣고 Run — 테이블로 가는 길은 두 갈래다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="52"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 53 클라우드에 남는 순간, 프로그램은 서비스가 된다 크게 보기">
+        <img src="assets/thumbs/s53.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 53 — 클라우드에 남는 순간, 프로그램은 서비스가 된다">
+        <figcaption><span class="num">53</span><span class="cap">클라우드에 남는 순간, 프로그램은 서비스가 된다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="53"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 54 지금 이 앱은 문이 열린 금고다 크게 보기">
+        <img src="assets/thumbs/s54.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 54 — 지금 이 앱은 문이 열린 금고다">
+        <figcaption><span class="num">54</span><span class="cap">지금 이 앱은 문이 열린 금고다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part3" data-index="54"
+               role="button" tabindex="0" style="--pc:#4A3E8F"
+               aria-label="슬라이드 55 RLS는 금고실 문이 아니라 상자마다 채우는 자물쇠다 크게 보기">
+        <img src="assets/thumbs/s55.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 55 — RLS는 금고실 문이 아니라 상자마다 채우는 자물쇠다">
+        <figcaption><span class="num">55</span><span class="cap">RLS는 금고실 문이 아니라 상자마다 채우는 자물쇠다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="55"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 56 Part 04 로컬 환경에서 진짜 개발자처럼 일하기 크게 보기">
+        <img src="assets/thumbs/s56.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 56 — Part 04 로컬 환경에서 진짜 개발자처럼 일하기">
+        <figcaption><span class="num">56</span><span class="cap">Part 04 로컬 환경에서 진짜 개발자처럼 일하기</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="56"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 57 편리한 공유 오피스에는 내 이름표가 없다 크게 보기">
+        <img src="assets/thumbs/s57.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 57 — 편리한 공유 오피스에는 내 이름표가 없다">
+        <figcaption><span class="num">57</span><span class="cap">편리한 공유 오피스에는 내 이름표가 없다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="57"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 58 로컬로 내려와야 하는 이유는 딱 세 가지다 크게 보기">
+        <img src="assets/thumbs/s58.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 58 — 로컬로 내려와야 하는 이유는 딱 세 가지다">
+        <figcaption><span class="num">58</span><span class="cap">로컬로 내려와야 하는 이유는 딱 세 가지다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="58"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 59 IDE는 코딩을 위한 최신식 주방이다 크게 보기">
+        <img src="assets/thumbs/s59.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 59 — IDE는 코딩을 위한 최신식 주방이다">
+        <figcaption><span class="num">59</span><span class="cap">IDE는 코딩을 위한 최신식 주방이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="59"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 60 Antigravity는 코드를 제안하지 않고 직접 쓴다 크게 보기">
+        <img src="assets/thumbs/s60.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 60 — Antigravity는 코드를 제안하지 않고 직접 쓴다">
+        <figcaption><span class="num">60</span><span class="cap">Antigravity는 코드를 제안하지 않고 직접 쓴다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="60"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 61 &#39;Add to PATH&#39;를 놓치면 터미널에서 IDE를 못 연다 크게 보기">
+        <img src="assets/thumbs/s61.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 61 — &#39;Add to PATH&#39;를 놓치면 터미널에서 IDE를 못 연다">
+        <figcaption><span class="num">61</span><span class="cap">&#39;Add to PATH&#39;를 놓치면 터미널에서 IDE를 못 연다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="61"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 62 실제로 쓰는 영역은 딱 두 곳이다 크게 보기">
+        <img src="assets/thumbs/s62.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 62 — 실제로 쓰는 영역은 딱 두 곳이다">
+        <figcaption><span class="num">62</span><span class="cap">실제로 쓰는 영역은 딱 두 곳이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="62"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 63 첫 프로젝트는 문장 하나로 시작한다 크게 보기">
+        <img src="assets/thumbs/s63.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 63 — 첫 프로젝트는 문장 하나로 시작한다">
+        <figcaption><span class="num">63</span><span class="cap">첫 프로젝트는 문장 하나로 시작한다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="63"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 64 localhost는 아파트 이름이고, 포트는 호수다 크게 보기">
+        <img src="assets/thumbs/s64.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 64 — localhost는 아파트 이름이고, 포트는 호수다">
+        <figcaption><span class="num">64</span><span class="cap">localhost는 아파트 이름이고, 포트는 호수다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="64"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 65 로컬은 비밀 주방, 배포는 정식 오픈이다 크게 보기">
+        <img src="assets/thumbs/s65.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 65 — 로컬은 비밀 주방, 배포는 정식 오픈이다">
+        <figcaption><span class="num">65</span><span class="cap">로컬은 비밀 주방, 배포는 정식 오픈이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="65"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 66 Node.js는 공구함, npm은 앱 마켓, Vite는 모델하우스다 크게 보기">
+        <img src="assets/thumbs/s66.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 66 — Node.js는 공구함, npm은 앱 마켓, Vite는 모델하우스다">
+        <figcaption><span class="num">66</span><span class="cap">Node.js는 공구함, npm은 앱 마켓, Vite는 모델하우스다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="66"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 67 명령어 네 줄이면 내 컴퓨터가 개발 서버가 된다 크게 보기">
+        <img src="assets/thumbs/s67.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 67 — 명령어 네 줄이면 내 컴퓨터가 개발 서버가 된다">
+        <figcaption><span class="num">67</span><span class="cap">명령어 네 줄이면 내 컴퓨터가 개발 서버가 된다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="67"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 68 저장하는 순간 화면이 바뀐다 크게 보기">
+        <img src="assets/thumbs/s68.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 68 — 저장하는 순간 화면이 바뀐다">
+        <figcaption><span class="num">68</span><span class="cap">저장하는 순간 화면이 바뀐다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="68"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 69 오류는 실패가 아니라 예정된 순서다 크게 보기">
+        <img src="assets/thumbs/s69.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 69 — 오류는 실패가 아니라 예정된 순서다">
+        <figcaption><span class="num">69</span><span class="cap">오류는 실패가 아니라 예정된 순서다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="69"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 70 &#39;진짜최종_이게맞음.hwp&#39;는 버전 관리가 아니다 크게 보기">
+        <img src="assets/thumbs/s70.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 70 — &#39;진짜최종_이게맞음.hwp&#39;는 버전 관리가 아니다">
+        <figcaption><span class="num">70</span><span class="cap">&#39;진짜최종_이게맞음.hwp&#39;는 버전 관리가 아니다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="70"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 71 Git은 일기장, GitHub는 금고, Desktop은 열쇠꾸러미다 크게 보기">
+        <img src="assets/thumbs/s71.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 71 — Git은 일기장, GitHub는 금고, Desktop은 열쇠꾸러미다">
+        <figcaption><span class="num">71</span><span class="cap">Git은 일기장, GitHub는 금고, Desktop은 열쇠꾸러미다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="71"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 72 커밋은 보스전 직전의 세이브다 크게 보기">
+        <img src="assets/thumbs/s72.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 72 — 커밋은 보스전 직전의 세이브다">
+        <figcaption><span class="num">72</span><span class="cap">커밋은 보스전 직전의 세이브다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="72"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 73 일부러 망가뜨려 봐야 안전망을 믿게 된다 크게 보기">
+        <img src="assets/thumbs/s73.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 73 — 일부러 망가뜨려 봐야 안전망을 믿게 된다">
+        <figcaption><span class="num">73</span><span class="cap">일부러 망가뜨려 봐야 안전망을 믿게 된다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="73"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 74 한 줄 고치고 Push했을 뿐인데 세계가 바뀐다 크게 보기">
+        <img src="assets/thumbs/s74.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 74 — 한 줄 고치고 Push했을 뿐인데 세계가 바뀐다">
+        <figcaption><span class="num">74</span><span class="cap">한 줄 고치고 Push했을 뿐인데 세계가 바뀐다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="part4" data-index="74"
+               role="button" tabindex="0" style="--pc:#6356A2"
+               aria-label="슬라이드 75 MCP는 AI를 말하는 존재에서 행동하는 존재로 바꾼 표준이다 크게 보기">
+        <img src="assets/thumbs/s75.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 75 — MCP는 AI를 말하는 존재에서 행동하는 존재로 바꾼 표준이다">
+        <figcaption><span class="num">75</span><span class="cap">MCP는 AI를 말하는 존재에서 행동하는 존재로 바꾼 표준이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="appendix" data-index="75"
+               role="button" tabindex="0" style="--pc:#E85297"
+               aria-label="슬라이드 76 부록 그 밖의 인공지능 도구들 크게 보기">
+        <img src="assets/thumbs/s76.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 76 — 부록 그 밖의 인공지능 도구들">
+        <figcaption><span class="num">76</span><span class="cap">부록 그 밖의 인공지능 도구들</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="appendix" data-index="76"
+               role="button" tabindex="0" style="--pc:#E85297"
+               aria-label="슬라이드 77 도구는 계속 바뀐다 — 그래서 부록은 소개와 설치만 다룬다 크게 보기">
+        <img src="assets/thumbs/s77.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 77 — 도구는 계속 바뀐다 — 그래서 부록은 소개와 설치만 다룬다">
+        <figcaption><span class="num">77</span><span class="cap">도구는 계속 바뀐다 — 그래서 부록은 소개와 설치만 다룬다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="appendix" data-index="77"
+               role="button" tabindex="0" style="--pc:#E85297"
+               aria-label="슬라이드 78 Cursor는 VS Code를 통째로 포크했다 크게 보기">
+        <img src="assets/thumbs/s78.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 78 — Cursor는 VS Code를 통째로 포크했다">
+        <figcaption><span class="num">78</span><span class="cap">Cursor는 VS Code를 통째로 포크했다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="appendix" data-index="78"
+               role="button" tabindex="0" style="--pc:#E85297"
+               aria-label="슬라이드 79 Cursor의 무기는 다섯 가지다 크게 보기">
+        <img src="assets/thumbs/s79.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 79 — Cursor의 무기는 다섯 가지다">
+        <figcaption><span class="num">79</span><span class="cap">Cursor의 무기는 다섯 가지다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="appendix" data-index="79"
+               role="button" tabindex="0" style="--pc:#E85297"
+               aria-label="슬라이드 80 설치는 여섯 단계 — 진짜 관문은 4단계 [IDE] 버튼이다 크게 보기">
+        <img src="assets/thumbs/s80.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 80 — 설치는 여섯 단계 — 진짜 관문은 4단계 [IDE] 버튼이다">
+        <figcaption><span class="num">80</span><span class="cap">설치는 여섯 단계 — 진짜 관문은 4단계 [IDE] 버튼이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="appendix" data-index="80"
+               role="button" tabindex="0" style="--pc:#E85297"
+               aria-label="슬라이드 81 &quot;회원가입 만들어줘&quot;는 실패한다 — 구체적으로 말하고 Diff를 읽어라 크게 보기">
+        <img src="assets/thumbs/s81.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 81 — &quot;회원가입 만들어줘&quot;는 실패한다 — 구체적으로 말하고 Diff를 읽어라">
+        <figcaption><span class="num">81</span><span class="cap">&quot;회원가입 만들어줘&quot;는 실패한다 — 구체적으로 말하고 Diff를 읽어라</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="appendix" data-index="81"
+               role="button" tabindex="0" style="--pc:#E85297"
+               aria-label="슬라이드 82 Claude Code는 IDE를 버리고 터미널로 갔다 크게 보기">
+        <img src="assets/thumbs/s82.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 82 — Claude Code는 IDE를 버리고 터미널로 갔다">
+        <figcaption><span class="num">82</span><span class="cap">Claude Code는 IDE를 버리고 터미널로 갔다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="appendix" data-index="82"
+               role="button" tabindex="0" style="--pc:#E85297"
+               aria-label="슬라이드 83 설치는 PowerShell 한 줄이다 크게 보기">
+        <img src="assets/thumbs/s83.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 83 — 설치는 PowerShell 한 줄이다">
+        <figcaption><span class="num">83</span><span class="cap">설치는 PowerShell 한 줄이다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="closing" data-index="83"
+               role="button" tabindex="0" style="--pc:#231815"
+               aria-label="슬라이드 84 실력은 코드를 쓰는 손이 아니라, 문제를 정확히 설명하는 입에서 나온다 크게 보기">
+        <img src="assets/thumbs/s84.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 84 — 실력은 코드를 쓰는 손이 아니라, 문제를 정확히 설명하는 입에서 나온다">
+        <figcaption><span class="num">84</span><span class="cap">실력은 코드를 쓰는 손이 아니라, 문제를 정확히 설명하는 입에서 나온다</span></figcaption>
+      </figure>
+      <figure class="thumb" data-part="closing" data-index="84"
+               role="button" tabindex="0" style="--pc:#231815"
+               aria-label="슬라이드 85 내일 아침, 가장 자주 나오는 한숨 하나를 받아 적으세요 크게 보기">
+        <img src="assets/thumbs/s85.webp" width="520" height="293" loading="lazy" decoding="async"
+             alt="슬라이드 85 — 내일 아침, 가장 자주 나오는 한숨 하나를 받아 적으세요">
+        <figcaption><span class="num">85</span><span class="cap">내일 아침, 가장 자주 나오는 한숨 하나를 받아 적으세요</span></figcaption>
+      </figure>
+    </div>
+  </div>
+</section>
+<section class="band" id="downloads">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="sec-label">자료 받기</p>
+      <h2>PDF로 받아 가세요</h2>
+      <p>전체 한 벌과 파트별 다섯 벌을 준비했습니다. 슬라이드마다 발표 노트가 들어 있는 PPTX가 필요하면 강의자에게 요청하세요.</p>
+    </div>
+    <div class="dl-list">
+    <a class="dl" href="pdf/vibecoding-full.pdf" download>
+      <span class="ic" aria-hidden="true">PDF</span>
+      <span class="t"><b>전체 — 85장 한 벌</b><span>도입부터 클로징까지 통합본</span></span>
+      <span class="sz">32.1MB</span>
+    </a>
+    <a class="dl" href="pdf/part1-아이디어를-서비스로.pdf" download>
+      <span class="ic" aria-hidden="true">PDF</span>
+      <span class="t"><b>Part 01 아이디어를 서비스로 전환하는 첫걸음</b><span>슬라이드 4–22</span></span>
+      <span class="sz">10.4MB</span>
+    </a>
+    <a class="dl" href="pdf/part2-앱에-지식을-더하다.pdf" download>
+      <span class="ic" aria-hidden="true">PDF</span>
+      <span class="t"><b>Part 02 앱에 지식을 더하다</b><span>슬라이드 23–42</span></span>
+      <span class="sz">7.0MB</span>
+    </a>
+    <a class="dl" href="pdf/part3-앱에-클라우드를-심다.pdf" download>
+      <span class="ic" aria-hidden="true">PDF</span>
+      <span class="t"><b>Part 03 앱에 클라우드 기능을 심다</b><span>슬라이드 43–55</span></span>
+      <span class="sz">3.9MB</span>
+    </a>
+    <a class="dl" href="pdf/part4-진짜-개발자처럼.pdf" download>
+      <span class="ic" aria-hidden="true">PDF</span>
+      <span class="t"><b>Part 04 로컬 환경에서 진짜 개발자처럼 일하기</b><span>슬라이드 56–75</span></span>
+      <span class="sz">6.8MB</span>
+    </a>
+    <a class="dl" href="pdf/appendix-그-밖의-AI-도구들.pdf" download>
+      <span class="ic" aria-hidden="true">PDF</span>
+      <span class="t"><b>부록 그 밖의 인공지능 도구들</b><span>슬라이드 76–83</span></span>
+      <span class="sz">3.1MB</span>
+    </a>
+    </div>
+  </div>
+</section>
+<section class="band alt" id="book">
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="sec-label">교재</p>
+      <h2>오늘 다룬 내용은 책 한 권에 담겨 있습니다</h2>
+      <p>강의는 288쪽을 85장으로 줄인 것입니다. 실습 화면과 프롬프트 전문, 완성 코드는 책에 있습니다.</p>
+    </div>
+    <div class="book">
+      <img class="book-cover" src="assets/book-cover.jpg" alt="요즘 교사를 위한 웹앱 만들기 with 바이브 코딩 표지" width="500" height="642" loading="lazy">
+      <div class="book-body">
+        <h3>요즘 교사를 위한 웹앱 만들기 with 바이브 코딩</h3>
+        <p class="by">이상선 · 김진관 · 이대형 · 윤신영 · 김상섭 지음</p>
+        <p class="bib">한빛미디어 · 2026년 9월 10일 · 288쪽 · 22,000원</p>
+        <p class="blurb">제미나이·Lovable·Cursor·안티그래비티부터 GitHub·Vercel·Supabase까지, 코딩 없이 대화만으로 완성하고 배포하는 교실 웹서비스. 2022 개정 교육과정을 반영했고 실습 프롬프트와 완성 코드를 함께 제공합니다.</p>
+        <ul class="book-points">
+        <li>우리 반 &#39;칭찬 보드&#39; 앱 만들기</li>
+        <li>학생 이름만 넣으면 되는 &#39;급식 알리미&#39; 앱 만들기</li>
+        <li>우리 반 &#39;글쓰기 SNS&#39; 만들어 학생과 나누기</li>
+        <li>모둠이 함께 쓰는 &#39;실시간 협업 보드&#39; 만들기</li>
+        <li>사진 찍으면 알려주는 &#39;AI 학습 앱&#39; 만들기</li>
+        <li>만든 앱, 링크 하나로 학생에게 공유하기</li>
+        </ul>
+        <div class="buy">
+        <a href="https://www.aladin.co.kr/shop/wproduct.aspx?ItemId=401489334" target="_blank" rel="noopener" class="primary">알라딘에서 보기</a>
+        <a href="https://search.kyobobook.co.kr/search?keyword=9791175790872" target="_blank" rel="noopener">교보문고</a>
+        <a href="https://www.yes24.com/product/search?query=9791175790872" target="_blank" rel="noopener">예스24</a>
+        <a href="https://www.hanbit.co.kr/search/search_list.html?keyword=9791175790872" target="_blank" rel="noopener">한빛미디어</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="foot">
+  <div class="wrap">
+    <div class="frow">
+      <div>
+        <b>강의 자료</b>
+        <div>슬라이드 85장 · 파트별 PDF 6종</div>
+        <div>강의가 끝난 뒤에도 같은 주소로 열립니다.</div>
+      </div>
+      <div>
+        <b>교재</b>
+        <div>요즘 교사를 위한 웹앱 만들기 with 바이브 코딩</div>
+        <div>한빛미디어 · 2026 · ISBN 9791175790872</div>
+      </div>
+      <div>
+        <b>인쇄 / PDF 저장</b>
+        <div style="margin-bottom:10px">메뉴와 버튼을 뺀 A4 형태로 출력됩니다.</div>
+        <button class="print-btn" type="button" id="printBtn">이 페이지 인쇄하기</button>
+      </div>
+    </div>
+    <p class="fine">이 페이지의 슬라이드는 『요즘 교사를 위한 웹앱 만들기 with 바이브 코딩』(한빛미디어, 2026)을 바탕으로 만든 강의용 자료입니다. 강의 참석자의 학습 목적으로만 사용해 주세요. 표지 이미지의 권리는 한빛미디어에 있습니다.</p>
+  </div>
+</footer>
+
+<!-- 라이트박스 -->
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="슬라이드 크게 보기">
+  <div class="lb-top">
+    <span class="lb-count" id="lbCount"></span>
+    <span class="lb-title" id="lbTitle"></span>
+    <button class="lb-close" id="lbClose" aria-label="닫기">✕</button>
+  </div>
+  <div class="lb-stage" id="lbStage">
+    <button class="lb-nav lb-prev" id="lbPrev" aria-label="이전 슬라이드">‹</button>
+    <img id="lbImg" alt="">
+    <button class="lb-nav lb-next" id="lbNext" aria-label="다음 슬라이드">›</button>
+  </div>
+  <div class="lb-foot">
+    <a id="lbOpen" href="#" target="_blank" rel="noopener">이미지 새 탭에서 열기</a>
+    <a id="lbPdf" href="#">이 파트 PDF 받기</a>
+  </div>
+</div>
+
+<!-- 프로젝터용 QR 전체화면 -->
+<div class="qr-full" id="qrFull" role="dialog" aria-modal="true" aria-label="QR 코드 크게 보기">
+  <div class="inner">
+    <h2>이 QR을 찍으면 오늘 자료가 열립니다</h2>
+    <p>폰 카메라를 QR에 비추기만 하면 됩니다. 강의가 끝난 뒤에도 같은 주소로 들어올 수 있습니다.</p>
+    <div class="big" id="qrBig"></div>
+    <div class="u" id="qrBigUrl"></div>
+    <button class="close" id="qrFullClose">닫기 (Esc)</button>
+  </div>
+</div>
+
+<script src="assets/vendor/qrcode.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var CFG = {"site":{"url":""}};
+  var SLIDES = [{"n":1,"title":"요즘 교사를 위한 웹앱 만들기 with 바이브 코딩","full":"assets/slides/s1.webp","pdf":""},{"n":2,"title":"\"이게 왜 이렇게 불편하지?\" — 이 한 줄에서 모든 서비스가 시작됐다","full":"assets/slides/s2.webp","pdf":""},{"n":3,"title":"오늘 우리는 앱에 기관을 하나씩 달아 갑니다","full":"assets/slides/s3.webp","pdf":""},{"n":4,"title":"Part 01 아이디어를 서비스로 전환하는 첫걸음","full":"assets/slides/s4.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":5,"title":"200명의 서술형 답안지는 16시간짜리 노동이다","full":"assets/slides/s5.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":6,"title":"기술은 발전했는데 평가만 과거에 머물러 있다","full":"assets/slides/s6.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":7,"title":"체념을 정의로 바꾸면, 불편함은 입력·판단·출력 세 문제가 된다","full":"assets/slides/s7.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":8,"title":"한숨이 앱의 이름이고, 한숨의 이유가 핵심 기능이다","full":"assets/slides/s8.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":9,"title":"좋은 문제는 만능이 아니라 칼날처럼 구체적이다","full":"assets/slides/s9.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":10,"title":"\"나는 [사용자]로서, [목표]를 위해, [기능]이 필요하다\"","full":"assets/slides/s10.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":11,"title":"MVP는 아이언맨 슈트가 아니라 바퀴 달린 의자다","full":"assets/slides/s11.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":12,"title":"PRD 한 장이 고민의 80%를 미리 없앤다","full":"assets/slides/s12.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":13,"title":"복사 → 메모장 → .html로 저장 → 더블클릭, 네 번이면 앱이 태어난다","full":"assets/slides/s13.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":14,"title":"코드 한 줄 치지 않았는데 작동하는 도구가 생겼다","full":"assets/slides/s14.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":15,"title":"HTML은 설계도, CSS는 인테리어, JavaScript는 점원이다","full":"assets/slides/s15.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":16,"title":"로컬 스토리지는 그 기기 안에서만 열리는 작은 창고다","full":"assets/slides/s16.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":17,"title":"내 컴퓨터에서만 열리는 파일은 아직 서비스가 아니다","full":"assets/slides/s17.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":18,"title":"Lovable은 대화로 주문받는 풀스택 앱 빌더다","full":"assets/slides/s18.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":19,"title":"화면만 주문하지 말고, 데이터 구조까지 함께 주문하라","full":"assets/slides/s19.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":20,"title":"Publish 버튼 하나가 내 파일을 개업한 가게로 바꾼다","full":"assets/slides/s20.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":21,"title":"웹앱은 홀·주방·냉장고·주문서로 이루어진 식당이다","full":"assets/slides/s21.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":22,"title":"여기까지 답할 수 있습니까 — PART 01","full":"assets/slides/s22.webp","pdf":"pdf/part1-아이디어를-서비스로.pdf"},{"n":23,"title":"Part 02 앱에 지식을 더하다","full":"assets/slides/s23.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":24,"title":"우리가 만든 앱은 아직 고립된 섬이다","full":"assets/slides/s24.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":25,"title":"API는 사람이 아니라 기계들끼리 쓰는 대화 창구다","full":"assets/slides/s25.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":26,"title":"서버는 전체를 열지 않고, 허락한 것만 건넨다","full":"assets/slides/s26.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":27,"title":"API가 돌려주는 건 표가 아니라 이름표 붙은 텍스트 덩어리다","full":"assets/slides/s27.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":28,"title":"DDISH_NM이 요리명이라는 걸 알면 프롬프트가 달라진다","full":"assets/slides/s28.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":29,"title":"국가가 이미 지어 둔 데이터 생태계를 부품처럼 가져다 쓴다","full":"assets/slides/s29.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":30,"title":"프론트엔드는 홀, 백엔드는 주방, API는 종업원과 주문서다","full":"assets/slides/s30.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":31,"title":"인증 키는 서버로 들어가는 디지털 교직원증이다","full":"assets/slides/s31.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":32,"title":"프롬프트 한 문단이 급식 조회 앱이 된다","full":"assets/slides/s32.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":33,"title":"완성이 아니라 개선이 바이브 코딩의 본체다","full":"assets/slides/s33.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":34,"title":"프롬프트에 세 가지만 넣으면 API 코드는 AI가 쓴다","full":"assets/slides/s34.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":35,"title":"글자를 모르는 아이는 챗봇에게 질문할 수 없다","full":"assets/slides/s35.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":36,"title":"앱에 눈과 두뇌와 입을 하나씩 달아 준다","full":"assets/slides/s36.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":37,"title":"사물을 비추면 'Mug'가 뜨고 소리가 난다","full":"assets/slides/s37.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":38,"title":"지시문 한 줄만 바꾸면 전혀 다른 앱이 된다","full":"assets/slides/s38.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":39,"title":"키를 만들려면 프로젝트부터 있어야 한다","full":"assets/slides/s39.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":40,"title":"삐뚤빼뚤한 손글씨도 AI는 읽는다","full":"assets/slides/s40.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":41,"title":"시스템 프롬프트는 AI에게 주는 배역 설정서다","full":"assets/slides/s41.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":42,"title":"프로토타입과 서비스 사이에는 보안·과금·개인정보가 있다","full":"assets/slides/s42.webp","pdf":"pdf/part2-앱에-지식을-더하다.pdf"},{"n":43,"title":"Part 03 앱에 클라우드 기능을 심다","full":"assets/slides/s43.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":44,"title":"새로고침 한 번에 사라지는 앱은 아직 서비스가 아니다","full":"assets/slides/s44.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":45,"title":"데이터베이스는 교무실 캐비닛이고, 그 속은 엑셀과 똑같이 생겼다","full":"assets/slides/s45.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":46,"title":"복잡해 보여도 데이터베이스는 네 가지 주문만 외운다","full":"assets/slides/s46.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":47,"title":"백엔드는 이제 짓는 것이 아니라 빌려 쓰는 것이다","full":"assets/slides/s47.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":48,"title":"Airtable·Firebase·Supabase, 셋의 차이는 성능이 아니라 용도다","full":"assets/slides/s48.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":49,"title":"데이터 본부부터 세운다 — 마스터 키와 Seoul을 잊지 말 것","full":"assets/slides/s49.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":50,"title":"프론트엔드가 백엔드로 들어가려면 출입증 두 장이 필요하다","full":"assets/slides/s50.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":51,"title":"프롬프트 한 장에 화면·테이블·CRUD를 한꺼번에 시킨다","full":"assets/slides/s51.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":52,"title":"AI가 써 준 설계도를 붙여넣고 Run — 테이블로 가는 길은 두 갈래다","full":"assets/slides/s52.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":53,"title":"클라우드에 남는 순간, 프로그램은 서비스가 된다","full":"assets/slides/s53.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":54,"title":"지금 이 앱은 문이 열린 금고다","full":"assets/slides/s54.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":55,"title":"RLS는 금고실 문이 아니라 상자마다 채우는 자물쇠다","full":"assets/slides/s55.webp","pdf":"pdf/part3-앱에-클라우드를-심다.pdf"},{"n":56,"title":"Part 04 로컬 환경에서 진짜 개발자처럼 일하기","full":"assets/slides/s56.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":57,"title":"편리한 공유 오피스에는 내 이름표가 없다","full":"assets/slides/s57.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":58,"title":"로컬로 내려와야 하는 이유는 딱 세 가지다","full":"assets/slides/s58.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":59,"title":"IDE는 코딩을 위한 최신식 주방이다","full":"assets/slides/s59.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":60,"title":"Antigravity는 코드를 제안하지 않고 직접 쓴다","full":"assets/slides/s60.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":61,"title":"'Add to PATH'를 놓치면 터미널에서 IDE를 못 연다","full":"assets/slides/s61.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":62,"title":"실제로 쓰는 영역은 딱 두 곳이다","full":"assets/slides/s62.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":63,"title":"첫 프로젝트는 문장 하나로 시작한다","full":"assets/slides/s63.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":64,"title":"localhost는 아파트 이름이고, 포트는 호수다","full":"assets/slides/s64.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":65,"title":"로컬은 비밀 주방, 배포는 정식 오픈이다","full":"assets/slides/s65.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":66,"title":"Node.js는 공구함, npm은 앱 마켓, Vite는 모델하우스다","full":"assets/slides/s66.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":67,"title":"명령어 네 줄이면 내 컴퓨터가 개발 서버가 된다","full":"assets/slides/s67.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":68,"title":"저장하는 순간 화면이 바뀐다","full":"assets/slides/s68.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":69,"title":"오류는 실패가 아니라 예정된 순서다","full":"assets/slides/s69.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":70,"title":"'진짜최종_이게맞음.hwp'는 버전 관리가 아니다","full":"assets/slides/s70.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":71,"title":"Git은 일기장, GitHub는 금고, Desktop은 열쇠꾸러미다","full":"assets/slides/s71.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":72,"title":"커밋은 보스전 직전의 세이브다","full":"assets/slides/s72.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":73,"title":"일부러 망가뜨려 봐야 안전망을 믿게 된다","full":"assets/slides/s73.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":74,"title":"한 줄 고치고 Push했을 뿐인데 세계가 바뀐다","full":"assets/slides/s74.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":75,"title":"MCP는 AI를 말하는 존재에서 행동하는 존재로 바꾼 표준이다","full":"assets/slides/s75.webp","pdf":"pdf/part4-진짜-개발자처럼.pdf"},{"n":76,"title":"부록 그 밖의 인공지능 도구들","full":"assets/slides/s76.webp","pdf":"pdf/appendix-그-밖의-AI-도구들.pdf"},{"n":77,"title":"도구는 계속 바뀐다 — 그래서 부록은 소개와 설치만 다룬다","full":"assets/slides/s77.webp","pdf":"pdf/appendix-그-밖의-AI-도구들.pdf"},{"n":78,"title":"Cursor는 VS Code를 통째로 포크했다","full":"assets/slides/s78.webp","pdf":"pdf/appendix-그-밖의-AI-도구들.pdf"},{"n":79,"title":"Cursor의 무기는 다섯 가지다","full":"assets/slides/s79.webp","pdf":"pdf/appendix-그-밖의-AI-도구들.pdf"},{"n":80,"title":"설치는 여섯 단계 — 진짜 관문은 4단계 [IDE] 버튼이다","full":"assets/slides/s80.webp","pdf":"pdf/appendix-그-밖의-AI-도구들.pdf"},{"n":81,"title":"\"회원가입 만들어줘\"는 실패한다 — 구체적으로 말하고 Diff를 읽어라","full":"assets/slides/s81.webp","pdf":"pdf/appendix-그-밖의-AI-도구들.pdf"},{"n":82,"title":"Claude Code는 IDE를 버리고 터미널로 갔다","full":"assets/slides/s82.webp","pdf":"pdf/appendix-그-밖의-AI-도구들.pdf"},{"n":83,"title":"설치는 PowerShell 한 줄이다","full":"assets/slides/s83.webp","pdf":"pdf/appendix-그-밖의-AI-도구들.pdf"},{"n":84,"title":"실력은 코드를 쓰는 손이 아니라, 문제를 정확히 설명하는 입에서 나온다","full":"assets/slides/s84.webp","pdf":""},{"n":85,"title":"내일 아침, 가장 자주 나오는 한숨 하나를 받아 적으세요","full":"assets/slides/s85.webp","pdf":""}];
+
+  /* --------------------------------------------------------
+     QR — 배포 주소를 따로 적지 않아도 지금 열린 주소로 만든다.
+     설정에 url이 있으면 그것을 쓰고, file://로 열었으면 직접 입력받는다.
+     -------------------------------------------------------- */
+
+  var LS_KEY = "lecture-site-url";
+  var urlBox   = document.getElementById("qrUrl");
+  var holder   = document.getElementById("qrHolder");
+  var bigBox   = document.getElementById("qrBig");
+  var bigUrl   = document.getElementById("qrBigUrl");
+  var setupIn  = document.getElementById("qrInput");
+
+  function currentUrl() {
+    if (CFG.site && CFG.site.url) return CFG.site.url;
+    try {
+      var saved = localStorage.getItem(LS_KEY);
+      if (saved) return saved;
+    } catch (e) { /* 사생활 보호 모드 — 저장 없이 진행 */ }
+    if (location.protocol === "file:") return "";
+    return location.origin + location.pathname.replace(/index\.html$/, "");
+  }
+
+  function drawQr(target, text, cell) {
+    if (!target) return;
+    target.innerHTML = "";
+    if (!text) {
+      target.classList.add("is-empty");
+      target.textContent = "주소가 아직 없습니다. 아래 ⚙에서 배포 주소를 넣으면 QR이 바로 만들어집니다.";
+      return;
+    }
+    target.classList.remove("is-empty");
+    try {
+      var qr = qrcode(0, "M");
+      qr.addData(text);
+      qr.make();
+      target.innerHTML = qr.createSvgTag({ cellSize: cell || 4, margin: 0, scalable: true });
+      var svg = target.querySelector("svg");
+      if (svg) {
+        svg.setAttribute("role", "img");
+        svg.setAttribute("aria-label", "이 페이지 주소의 QR 코드");
+        svg.removeAttribute("width");
+        svg.removeAttribute("height");
+      }
+    } catch (e) {
+      target.classList.add("is-empty");
+      target.textContent = "QR을 만들지 못했습니다: " + text;
+    }
+  }
+
+  function renderQr() {
+    var u = currentUrl();
+    drawQr(holder, u, 4);
+    drawQr(bigBox, u, 8);
+    var label = u || "(배포 전)";
+    if (urlBox) urlBox.textContent = label;
+    if (bigUrl) bigUrl.textContent = label;
+    if (setupIn && !setupIn.value) setupIn.value = u;
+  }
+
+  renderQr();
+
+  if (setupIn) {
+    setupIn.addEventListener("input", function () {
+      var v = setupIn.value.trim();
+      try { v ? localStorage.setItem(LS_KEY, v) : localStorage.removeItem(LS_KEY); } catch (e) {}
+      var u = v || currentUrl();
+      drawQr(holder, u, 4);
+      drawQr(bigBox, u, 8);
+      if (urlBox) urlBox.textContent = u || "(배포 전)";
+      if (bigUrl) bigUrl.textContent = u || "(배포 전)";
+    });
+  }
+
+  var copyBtn = document.getElementById("qrCopy");
+  if (copyBtn) {
+    copyBtn.addEventListener("click", function () {
+      var u = currentUrl();
+      if (!u) return;
+      var done = function () {
+        var old = copyBtn.textContent;
+        copyBtn.textContent = "복사됨 ✓";
+        setTimeout(function () { copyBtn.textContent = old; }, 1600);
+      };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(u).then(done, function () {});
+      } else {
+        var ta = document.createElement("textarea");
+        ta.value = u; document.body.appendChild(ta); ta.select();
+        try { document.execCommand("copy"); done(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+    });
+  }
+
+  /* QR 전체화면 — 강의장 프로젝터에 띄우는 용도 */
+  var qrFull = document.getElementById("qrFull");
+  function openQrFull() { qrFull.classList.add("is-open"); document.body.style.overflow = "hidden"; }
+  function closeQrFull() { qrFull.classList.remove("is-open"); document.body.style.overflow = ""; }
+  Array.prototype.forEach.call(document.querySelectorAll("[data-qr-open]"), function (b) {
+    b.addEventListener("click", openQrFull);
+  });
+  document.getElementById("qrFullClose").addEventListener("click", closeQrFull);
+  qrFull.addEventListener("click", function (e) { if (e.target === qrFull) closeQrFull(); });
+
+  /* --------------------------------------------------------
+     갤러리 탭
+     -------------------------------------------------------- */
+
+  var tabs = Array.prototype.slice.call(document.querySelectorAll(".tab"));
+  var figures = Array.prototype.slice.call(document.querySelectorAll(".thumb"));
+  var visible = figures.slice();
+
+  function applyFilter(part) {
+    visible = [];
+    figures.forEach(function (f) {
+      var hit = part === "all" || f.dataset.part === part;
+      f.style.display = hit ? "" : "none";
+      if (hit) visible.push(f);
+    });
+    tabs.forEach(function (t) {
+      t.setAttribute("aria-selected", String(t.dataset.part === part));
+    });
+  }
+
+  tabs.forEach(function (t) {
+    t.addEventListener("click", function () { applyFilter(t.dataset.part); });
+  });
+
+  /* 여정 카드 → 그 파트만 걸러 놓고 갤러리로 내려보낸다 */
+  Array.prototype.forEach.call(document.querySelectorAll("[data-jump]"), function (card) {
+    card.addEventListener("click", function () { applyFilter(card.dataset.jump); });
+  });
+
+  /* --------------------------------------------------------
+     라이트박스
+     -------------------------------------------------------- */
+
+  var lb      = document.getElementById("lb");
+  var lbImg   = document.getElementById("lbImg");
+  var lbCount = document.getElementById("lbCount");
+  var lbTitle = document.getElementById("lbTitle");
+  var lbPrev  = document.getElementById("lbPrev");
+  var lbNext  = document.getElementById("lbNext");
+  var lbOpen  = document.getElementById("lbOpen");
+  var lbPdf   = document.getElementById("lbPdf");
+  var lastFocus = null;
+  var cursor = 0;
+
+  function show(i) {
+    if (i < 0 || i >= visible.length) return;
+    cursor = i;
+    var fig = visible[i];
+    var idx = parseInt(fig.dataset.index, 10);
+    var s = SLIDES[idx];
+    lbImg.src = s.full;
+    lbImg.alt = "슬라이드 " + s.n + (s.title ? " — " + s.title : "");
+    lbCount.textContent = s.n + " / " + SLIDES.length;
+    lbTitle.textContent = s.title || "";
+    lbOpen.href = s.full;
+    lbPrev.disabled = i === 0;
+    lbNext.disabled = i === visible.length - 1;
+    if (s.pdf) { lbPdf.href = s.pdf; lbPdf.style.display = ""; lbPdf.download = ""; }
+    else { lbPdf.style.display = "none"; }
+  }
+
+  function openLb(i) {
+    lastFocus = document.activeElement;
+    lb.classList.add("is-open");
+    document.body.style.overflow = "hidden";
+    show(i);
+    document.getElementById("lbClose").focus();
+  }
+
+  function closeLb() {
+    lb.classList.remove("is-open");
+    document.body.style.overflow = "";
+    lbImg.removeAttribute("src");
+    if (lastFocus) lastFocus.focus();
+  }
+
+  figures.forEach(function (f) {
+    f.addEventListener("click", function () { openLb(visible.indexOf(f)); });
+    /* 썸네일은 figure라 기본 키 동작이 없다 — 엔터·스페이스를 직접 받는다 */
+    f.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); openLb(visible.indexOf(f)); }
+    });
+  });
+
+  document.getElementById("lbClose").addEventListener("click", closeLb);
+  lbPrev.addEventListener("click", function () { show(cursor - 1); });
+  lbNext.addEventListener("click", function () { show(cursor + 1); });
+  document.getElementById("lbStage").addEventListener("click", function (e) {
+    if (e.target === e.currentTarget) closeLb();
+  });
+
+  /* 스와이프 */
+  var tx = 0, ty = 0;
+  lb.addEventListener("touchstart", function (e) {
+    tx = e.changedTouches[0].clientX; ty = e.changedTouches[0].clientY;
+  }, { passive: true });
+  lb.addEventListener("touchend", function (e) {
+    var dx = e.changedTouches[0].clientX - tx;
+    var dy = e.changedTouches[0].clientY - ty;
+    if (Math.abs(dx) > 48 && Math.abs(dx) > Math.abs(dy)) show(cursor + (dx < 0 ? 1 : -1));
+  }, { passive: true });
+
+  /* 키보드 */
+  document.addEventListener("keydown", function (e) {
+    if (qrFull.classList.contains("is-open")) {
+      if (e.key === "Escape") closeQrFull();
+      return;
+    }
+    if (lb.classList.contains("is-open")) {
+      if (e.key === "Escape") closeLb();
+      else if (e.key === "ArrowRight" || e.key === " ") { e.preventDefault(); show(cursor + 1); }
+      else if (e.key === "ArrowLeft") { e.preventDefault(); show(cursor - 1); }
+      else if (e.key === "Home") { e.preventDefault(); show(0); }
+      else if (e.key === "End") { e.preventDefault(); show(visible.length - 1); }
+      return;
+    }
+    var t = e.target.tagName;
+    if (t === "INPUT" || t === "TEXTAREA") return;
+    if (e.key === "q" || e.key === "Q" || e.key === "ㅂ") openQrFull();
+  });
+
+  var printBtn = document.getElementById("printBtn");
+  if (printBtn) printBtn.addEventListener("click", function () { window.print(); });
+})();
+</script>
+</body>
+</html>
