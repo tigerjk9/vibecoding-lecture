@@ -582,7 +582,8 @@ footer.foot .fine {
     <span class="topbar-title">웹앱 만들기 with 바이브 코딩</span>
     <nav class="topbar-nav" aria-label="바로가기">
         <a href="#journey">오늘의 여정</a>
-        <a href="#slides">슬라이드</a>
+        <a href="#videos">영상</a>
+        <a href="#slides" class="opt">슬라이드</a>
         <a href="#downloads" class="opt">자료 받기</a>
         <a href="#book" class="opt">책</a>
         <button class="qr-btn" data-qr-open type="button">
@@ -680,6 +681,72 @@ footer.foot .fine {
       <p>내일 아침, 가장 자주 나오는 한숨 하나를 받아 적는 것에서 다시 시작합니다.</p>
       <span class="jfoot">슬라이드 2장 · 84–85 →</span>
     </a>
+    </div>
+  </div>
+</section><section class="band alt" id="videos">
+  <style>
+    .videos { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+    .vcard { background: var(--surface); border: 1px solid var(--rule); border-radius: var(--radius);
+             overflow: hidden; box-shadow: var(--shadow-1); border-top: 4px solid var(--pc); }
+    .vcard video { display: block; width: 100%; height: auto; aspect-ratio: 16 / 9; background: #000; }
+    .vbody { padding: 14px 16px 16px; }
+    .vlabel { font-size: 12.5px; font-weight: 700; color: var(--pc); letter-spacing: .02em; }
+    .vcard h3 { font-size: 17px; line-height: 1.4; margin: 4px 0 6px; color: var(--ink); word-break: keep-all; }
+    .vcard p { font-size: 14px; line-height: 1.6; color: var(--ink-2); word-break: keep-all; }
+    .vdl { display: inline-block; margin-top: 10px; font-size: 13px; font-weight: 600; color: var(--key-ink); }
+    @media print { #videos { display: none; } }
+  </style>
+  <div class="wrap">
+    <div class="sec-head">
+      <p class="sec-label">영상으로 보기</p>
+      <h2>파트마다 2분, 자막으로 따라가는 영상</h2>
+      <p>소리 없이 봐도 되도록 화면 문구만으로 만들었습니다. 강의 전에 미리 보거나, 강의가 끝난 뒤 한 파트씩 다시 볼 때 쓰세요.</p>
+    </div>
+    <div class="videos">
+    <article class="vcard" id="video-part1" style="--pc:#6356A2">
+      <video controls preload="none" playsinline poster="assets/video/vibe-ep1-poster.jpg" width="1280" height="720">
+        <source src="assets/video/vibe-ep1-720p.mp4" type="video/mp4">
+      </video>
+      <div class="vbody">
+        <span class="vlabel">1편 · PART 01 · 1:46</span>
+        <h3>한숨 하나를 앱으로</h3>
+        <p>교실의 한숨 하나를 PRD 한 장으로 적고, HTML 파일 하나짜리 앱으로 엽니다.</p>
+        <a class="vdl" href="assets/video/vibe-ep1-share.mp4" download>영상 내려받기</a>
+      </div>
+    </article>
+    <article class="vcard" id="video-part2" style="--pc:#3688C9">
+      <video controls preload="none" playsinline poster="assets/video/vibe-ep2-poster.jpg" width="1280" height="720">
+        <source src="assets/video/vibe-ep2-720p.mp4" type="video/mp4">
+      </video>
+      <div class="vbody">
+        <span class="vlabel">2편 · PART 02 · 1:32</span>
+        <h3>앱에 지식을 더하다</h3>
+        <p>고립된 섬 같은 앱에 급식 정보 같은 바깥 데이터와 AI를 붙이는 길을 봅니다.</p>
+        <a class="vdl" href="assets/video/vibe-ep2-share.mp4" download>영상 내려받기</a>
+      </div>
+    </article>
+    <article class="vcard" id="video-part3" style="--pc:#4A3E8F">
+      <video controls preload="none" playsinline poster="assets/video/vibe-ep3-poster.jpg" width="1280" height="720">
+        <source src="assets/video/vibe-ep3-720p.mp4" type="video/mp4">
+      </video>
+      <div class="vbody">
+        <span class="vlabel">3편 · PART 03 · 1:28</span>
+        <h3>앱에 기억과 문지기를 달다</h3>
+        <p>새로고침해도 남는 앱, 로그인한 사람만 여는 앱으로 바꿉니다.</p>
+        <a class="vdl" href="assets/video/vibe-ep3-share.mp4" download>영상 내려받기</a>
+      </div>
+    </article>
+    <article class="vcard" id="video-part4" style="--pc:#6356A2">
+      <video controls preload="none" playsinline poster="assets/video/vibe-ep4-poster.jpg" width="1280" height="720">
+        <source src="assets/video/vibe-ep4-720p.mp4" type="video/mp4">
+      </video>
+      <div class="vbody">
+        <span class="vlabel">4편 · PART 04 · 1:44</span>
+        <h3>내 컴퓨터를 작업실로</h3>
+        <p>Antigravity IDE에서 만들고 Git으로 저장해 배포까지, MCP로 실시간 보드를 짓습니다.</p>
+        <a class="vdl" href="assets/video/vibe-ep4-share.mp4" download>영상 내려받기</a>
+      </div>
+    </article>
     </div>
   </div>
 </section>
